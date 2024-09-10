@@ -32,11 +32,18 @@ public class FaseLexica {
                 continue;
             }
 
+            int inicial = i; // Para detectar si el identificador tiene menos o igual a 12 letras 
+
             if (Character.isLetter(actual)) {
                 StringBuilder identificador = new StringBuilder();
-                boolean contieneNumero = false; // Para detectar si el identificador tiene un número
+                boolean contieneNumero = false; // Para detectar si tiene un número
+                boolean contieneMayuscula = false; // Para detectar si tiene una mayuscula
+                int contieneMasCaracteres = 0;
 
                 while (i < chars.length && (Character.isLetterOrDigit(chars[i]))) {
+                    if (Character.isUpperCase(chars[i])) {
+                        contieneMayuscula = true;
+                    }
                     if (Character.isDigit(chars[i])) {
                         contieneNumero = true;
                     }
@@ -44,9 +51,20 @@ public class FaseLexica {
                     i++;
                 }
 
+                contieneMasCaracteres = i - inicial;
+                // validar que no sea mayor a 12 letras
+                if (contieneMasCaracteres > 12) {
+                    System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un error, identificador no valido, mayor a 12 letras: " + identificador.toString());
+                }
+                // validar que no tenga numero
                 if (contieneNumero) {
-                    System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un error, identificador no válido: " + identificador.toString());
-                } else {
+                    System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un error, identificador no valido, contiene un digito: " + identificador.toString());
+                }
+                // validar que no tenga mayusculas
+                if (contieneMayuscula) {
+                    System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un error, identificador no valido, contiene una mayuscula: " + identificador.toString());
+                }
+                if (contieneMasCaracteres <= 12 && contieneNumero == false && contieneMayuscula == false) {
                     String id = identificador.toString();
                     
                     // Verificar si el identificador ya existe en la tabla de símbolos
