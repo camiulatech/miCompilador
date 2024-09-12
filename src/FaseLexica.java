@@ -20,9 +20,21 @@ public class FaseLexica {
         reader.close();
     }
 
+    private String obtenerValorDeLaLinea(String linea) {
+        // Ejemplo básico: si la línea tiene la forma "id = valor;", extrae "valor"
+        String[] partes = linea.split("=");
+        if (partes.length == 2) {
+            return partes[1].trim().replace(";", ""); // Extrae el valor y elimina el ';'
+        }
+        return ""; // Si no se encuentra un valor, devuelve una cadena vacía
+    }
+    
+
     private void analizarLinea(String linea) {
         char[] chars = linea.toCharArray();
         int i = 0;
+        
+        
 
         while (i < chars.length) {
             char actual = chars[i];
@@ -69,9 +81,12 @@ public class FaseLexica {
                     
                     // Verificar si el identificador ya existe en la tabla de símbolos
                     if (!tablaSimbolos.existeSimbolo(id)) {
-                        InformacionSimbolo info = new InformacionSimbolo(lineaActual); // Crear nueva información del símbolo
+                        String valor = obtenerValorDeLaLinea(linea); // Método para extraer el valor
+                        InformacionSimbolo info = new InformacionSimbolo(lineaActual, valor); // Crear nueva información del símbolo
                         tablaSimbolos.agregarSimbolo(id, info); // Agregar a la tabla de símbolos
                     }
+                    
+                    
 
                     tokens.add(new Token(id, "IDENTIFICADOR"));
                 }
@@ -147,6 +162,7 @@ public class FaseLexica {
             for (Token token : analizador.getTokens()) {
                 System.out.println(token);
             }
+            analizador.tablaSimbolos.imprimirTablaSimbolos();
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());
         }

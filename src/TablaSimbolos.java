@@ -19,4 +19,14 @@ public class TablaSimbolos {
     public boolean existeSimbolo(String identificador) {
         return tabla.containsKey(identificador);
     }
+
+    public void imprimirTablaSimbolos() {
+        System.out.println("Tabla de Simbolos:");
+        for (Map.Entry<String, InformacionSimbolo> entry : tabla.entrySet()) {
+            String id = entry.getKey();
+            InformacionSimbolo info = entry.getValue();
+            System.out.println("Identificador: " + id + ", Informacion: " + info);
+        }
+        
+    }
 }
