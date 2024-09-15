@@ -1,6 +1,9 @@
 import java.util.HashMap;
 import java.util.Map;
 
+// En esta clase se almacena cada uno de los identificadores que cumplen con los requerimientos
+// de la gramatica y se guarda la informacion del mismo 
+
 public class TablaSimbolos {
     private Map<String, InformacionSimbolo> tabla;
 

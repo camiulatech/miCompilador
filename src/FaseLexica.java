@@ -21,20 +21,17 @@ public class FaseLexica {
     }
 
     private String obtenerValorDeLaLinea(String linea) {
-        // Ejemplo básico: si la línea tiene la forma "id = valor;", extrae "valor"
         String[] partes = linea.split("=");
         if (partes.length == 2) {
-            return partes[1].trim().replace(";", ""); // Extrae el valor y elimina el ';'
+            return partes[1].trim().replace(";", ""); // Se elimina el ;
         }
-        return ""; // Si no se encuentra un valor, devuelve una cadena vacía
+        return ""; 
     }
     
 
     private void analizarLinea(String linea) {
         char[] chars = linea.toCharArray();
         int i = 0;
-        
-        
 
         while (i < chars.length) {
             char actual = chars[i];
@@ -44,13 +41,13 @@ public class FaseLexica {
                 continue;
             }
 
-            int inicial = i; // Para detectar si el identificador tiene menos o igual a 12 letras 
+            int inicial = i; 
 
             if (Character.isLetter(actual)) {
                 StringBuilder identificador = new StringBuilder();
                 boolean contieneNumero = false; // Para detectar si tiene un número
                 boolean contieneMayuscula = false; // Para detectar si tiene una mayuscula
-                int contieneMasCaracteres = 0;
+                int contieneMasCaracteres = 0; // Para detectar si el identificador tiene menos o igual a 12 letras 
 
                 while (i < chars.length && (Character.isLetterOrDigit(chars[i]))) {
                     if (Character.isUpperCase(chars[i])) {
@@ -64,26 +61,26 @@ public class FaseLexica {
                 }
 
                 contieneMasCaracteres = i - inicial;
-                // validar que no sea mayor a 12 letras
+                // Validar que no sea mayor a 12 letras
                 if (contieneMasCaracteres > 12) {
                     System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un error, identificador no valido, mayor a 12 letras: " + identificador.toString());
                 }
-                // validar que no tenga numero
+                // Validar que no tenga numero
                 if (contieneNumero) {
                     System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un error, identificador no valido, contiene un digito: " + identificador.toString());
                 }
-                // validar que no tenga mayusculas
+                // Validar que no tenga mayusculas
                 if (contieneMayuscula) {
                     System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un error, identificador no valido, contiene una mayuscula: " + identificador.toString());
                 }
                 if (contieneMasCaracteres <= 12 && contieneNumero == false && contieneMayuscula == false) {
                     String id = identificador.toString();
                     
-                    // Verificar si el identificador ya existe en la tabla de símbolos
+                    // Verificar si el identificador ya existe en la tabla de simbolos
                     if (!tablaSimbolos.existeSimbolo(id)) {
-                        String valor = obtenerValorDeLaLinea(linea); // Método para extraer el valor
-                        InformacionSimbolo info = new InformacionSimbolo(lineaActual, valor); // Crear nueva información del símbolo
-                        tablaSimbolos.agregarSimbolo(id, info); // Agregar a la tabla de símbolos
+                        String valor = obtenerValorDeLaLinea(linea); 
+                        InformacionSimbolo info = new InformacionSimbolo(lineaActual, valor); 
+                        tablaSimbolos.agregarSimbolo(id, info); // Agregar a la tabla de simbolos
                     }
                     
                     
@@ -103,13 +100,9 @@ public class FaseLexica {
                 continue;
             }
 
-            // Manejo de otros tokens (., =, +, -, *, /, etc.)
+            // Se buscan de otros tokens 
             if (actual == '=') {
                 tokens.add(new Token("=", "ASIGNACION"));
-                i++;
-                continue;
-            } else if (actual == ';') {
-                tokens.add(new Token(";", "PUNTO_COMA"));
                 i++;
                 continue;
             } else if (actual == '+') {
@@ -136,9 +129,13 @@ public class FaseLexica {
                 tokens.add(new Token(")", "PARENTESIS_DER"));
                 i++;
                 continue;
+            } else if (actual == ';') {
+                tokens.add(new Token(";", "PUNTO_COMA"));
+                i++;
+                continue;
             }
 
-            // Si llegamos aquí, el carácter no se ha reconocido
+            // En caso que no se haya reconocido
             System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un error, lexema no reconocido: " + actual);
             i++;
         }
@@ -150,7 +147,7 @@ public class FaseLexica {
 
     public static void main(String[] args) {
         if (args.length != 1) {
-            System.out.println("Uso: java FaseLexica [ARCHIVO DE ENTRADA]");
+            System.out.println("Mi Compilador");
             return;
         }
 
