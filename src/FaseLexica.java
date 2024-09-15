@@ -44,7 +44,7 @@ public class FaseLexica {
 
             if (Character.isLetter(actual)) {
                 StringBuilder identificador = new StringBuilder();
-                boolean contieneNumero = false; // Para detectar si tiene un número
+                boolean contieneNumero = false; // Para detectar si tiene un numero
                 boolean contieneMayuscula = false; // Para detectar si tiene una mayuscula
                 int contieneMasCaracteres = 0; // Para detectar si el identificador tiene menos o igual a 12 letras 
 
@@ -60,6 +60,7 @@ public class FaseLexica {
                 }
 
                 contieneMasCaracteres = i - inicial;
+                
                 // Validar que no sea mayor a 12 letras
                 if (contieneMasCaracteres > 12) {
                     System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un error, identificador no valido, mayor a 12 letras: " + identificador.toString());

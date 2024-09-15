@@ -1,6 +1,6 @@
 public class InformacionSimbolo {
-    private int lineaDeclaracion;  // Línea donde se declaró el identificador
-    private String valor;          // Valor asociado al identificador
+    private int lineaDeclaracion;  
+    private String valor;          
 
     public InformacionSimbolo(int lineaDeclaracion, String valor) {
         this.lineaDeclaracion = lineaDeclaracion;
