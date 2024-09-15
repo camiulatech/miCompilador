@@ -73,6 +73,8 @@ public class FaseLexica {
                 if (contieneMayuscula) {
                     System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un error, identificador no valido, contiene una mayuscula: " + identificador.toString());
                 }
+
+                // Se hace la verificacion que no tenga ninguno de los posibles errores 
                 if (contieneMasCaracteres <= 12 && contieneNumero == false && contieneMayuscula == false) {
                     String id = identificador.toString();
                     
@@ -83,8 +85,6 @@ public class FaseLexica {
                         tablaSimbolos.agregarSimbolo(id, info); // Agregar a la tabla de simbolos
                     }
                     
-                    
-
                     tokens.add(new Token(id, "IDENTIFICADOR"));
                 }
                 continue;
@@ -146,11 +146,7 @@ public class FaseLexica {
     }
 
     public static void main(String[] args) {
-        if (args.length != 1) {
-            System.out.println("Mi Compilador");
-            return;
-        }
-
+        
         String archivo = args[0];
         FaseLexica analizador = new FaseLexica();
 
