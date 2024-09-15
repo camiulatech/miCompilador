@@ -1,4 +1,4 @@
-# Proyecto 1
+# Proyecto 1 - Mi Compilador 
 
 Fabiana Arias Rosales, Ian Calvo Madrigal y Camila Ulate Chaves
 

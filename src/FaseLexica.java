@@ -26,8 +26,7 @@ public class FaseLexica {
             return partes[1].trim().replace(";", ""); // Se elimina el ;
         }
         return ""; 
-    }
-    
+    }    
 
     private void analizarLinea(String linea) {
         char[] chars = linea.toCharArray();
