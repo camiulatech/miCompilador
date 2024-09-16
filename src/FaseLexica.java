@@ -10,14 +10,14 @@ public class FaseLexica {
     private int lineaActual = 1;
 
     public void analizarArchivo(String archivo) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(archivo));
+        BufferedReader leer = new BufferedReader(new FileReader(archivo));
         String linea;
 
-        while ((linea = reader.readLine()) != null) {
+        while ((linea = leer.readLine()) != null) {
             analizarLinea(linea);
             lineaActual++;
         }
-        reader.close();
+        leer.close();
     }
 
     private String obtenerValorDeLaLinea(String linea) {
@@ -29,11 +29,11 @@ public class FaseLexica {
     }    
 
     private void analizarLinea(String linea) {
-        char[] chars = linea.toCharArray();
+        char[] caracteres = linea.toCharArray();
         int i = 0;
 
-        while (i < chars.length) {
-            char actual = chars[i];
+        while (i < caracteres.length) {
+            char actual = caracteres[i];
 
             if (Character.isWhitespace(actual)) {
                 i++;
@@ -48,14 +48,14 @@ public class FaseLexica {
                 boolean contieneMayuscula = false; // Para detectar si tiene una mayuscula
                 int contieneMasCaracteres = 0; // Para detectar si el identificador tiene menos o igual a 12 letras 
 
-                while (i < chars.length && (Character.isLetterOrDigit(chars[i]))) {
-                    if (Character.isUpperCase(chars[i])) {
+                while (i < caracteres.length && (Character.isLetterOrDigit(caracteres[i]))) {
+                    if (Character.isUpperCase(caracteres[i])) {
                         contieneMayuscula = true;
                     }
-                    if (Character.isDigit(chars[i])) {
+                    if (Character.isDigit(caracteres[i])) {
                         contieneNumero = true;
                     }
-                    identificador.append(chars[i]);
+                    identificador.append(caracteres[i]);
                     i++;
                 }
 
@@ -82,7 +82,7 @@ public class FaseLexica {
                     if (!tablaSimbolos.existeSimbolo(id)) {
                         String valor = obtenerValorDeLaLinea(linea); 
                         InformacionSimbolo info = new InformacionSimbolo(lineaActual, valor); 
-                        tablaSimbolos.agregarSimbolo(id, info); // Agregar a la tabla de simbolos
+                        tablaSimbolos.agregarSimbolo(id, info);
                     }
                     
                     tokens.add(new Token(id, "IDENTIFICADOR"));
@@ -92,8 +92,8 @@ public class FaseLexica {
 
             if (Character.isDigit(actual)) {
                 StringBuilder numero = new StringBuilder();
-                while (i < chars.length && Character.isDigit(chars[i])) {
-                    numero.append(chars[i]);
+                while (i < caracteres.length && Character.isDigit(caracteres[i])) {
+                    numero.append(caracteres[i]);
                     i++;
                 }
                 tokens.add(new Token(numero.toString(), "NUMERO"));
