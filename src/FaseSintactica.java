@@ -12,56 +12,89 @@ public class FaseSintactica {
     public void analizar() {
         try {
             while (indiceActual < tokens.size()) {
-                declaracion();
+                programa(); // Comienza con la producción 'programa'
             }
         } catch (Exception e) {
             System.out.println("Error de análisis sintáctico: " + e.getMessage());
         }
     }
 
-    private void declaracion() throws Exception {
-        // Suponiendo que una declaración tiene la forma: IDENTIFICADOR = EXPRESION;
-        if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
-            Token identificador = tokens.get(indiceActual);
-            siguienteToken(); // Consumir el identificador
+    private void programa() throws Exception {
+        // La estructura es 'expresion ; { programa }'
+        while (indiceActual < tokens.size()) {
+            expresion(); // Analiza una expresión
 
-            if (tokens.get(indiceActual).getTipo().equals("ASIGNACION")) {
-                siguienteToken(); // Consumir el signo '='
-
-                // Aquí llamamos a la función para analizar la expresión
-                expresion();
-
-                if (tokens.get(indiceActual).getTipo().equals("PUNTO_COMA")) {
-                    siguienteToken(); // Consumir el punto y coma
-                    System.out.println("Declaración válida: " + identificador.getValor());
-                } else {
-                    throw new Exception("Se esperaba un punto y coma al final de la declaración.");
-                }
+            if (tokens.get(indiceActual).getTipo().equals("PUNTO_COMA")) {
+                siguienteToken(); // Consume el punto y coma
             } else {
-                throw new Exception("Se esperaba un signo de asignación.");
+                throw new Exception("Se esperaba un punto y coma al final de la expresión.");
             }
-        } else {
-            throw new Exception("Se esperaba un identificador.");
         }
     }
 
     private void expresion() throws Exception {
-        // Suponiendo que una expresión es un término seguido de operadores
-        termino();
+        // La producción 'expresion -> identificador = expresion | termino { ( +|- ) termino }'
 
-        while (indiceActual < tokens.size() && 
-               (tokens.get(indiceActual).getTipo().equals("SUMA") || tokens.get(indiceActual).getTipo().equals("RESTA"))) {
-            siguienteToken(); // Consumir el operador
-            termino(); // Consumir el siguiente término
+        if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
+            Token identificador = tokens.get(indiceActual);
+            siguienteToken(); // Consume el identificador
+
+            if (tokens.get(indiceActual).getTipo().equals("ASIGNACION")) {
+                siguienteToken(); // Consume el signo '='
+                // Analiza la expresión del lado derecho
+                expresion(); 
+            } else {
+                // Si no hay una asignación, retrocede para permitir que la expresión continúe
+                indiceActual--; // Regresar un token para analizar la expresión
+                termino(); // Comenzar la expresión
+                while (indiceActual < tokens.size() && 
+                       (tokens.get(indiceActual).getTipo().equals("SUMA") || 
+                        tokens.get(indiceActual).getTipo().equals("RESTA"))) {
+                    siguienteToken(); // Consume el operador
+                    termino(); // Consume el siguiente término
+                }
+            }
+        } else {
+            // Si no es un identificador, se comienza con un término
+            termino();
+            // Verifica si hay más operadores
+            while (indiceActual < tokens.size() && 
+                   (tokens.get(indiceActual).getTipo().equals("SUMA") || 
+                    tokens.get(indiceActual).getTipo().equals("RESTA"))) {
+                siguienteToken(); // Consume el operador
+                // Aquí es donde analizamos el siguiente término
+                termino(); // Consume el siguiente término
+            }
         }
     }
 
     private void termino() throws Exception {
-        // Suponiendo que un término es un número o un identificador
-        if (tokens.get(indiceActual).getTipo().equals("NUMERO") || tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
-            siguienteToken(); // Consumir el número o identificador
+        // La producción 'termino -> factor { ( * | / ) factor }'
+        factor(); // Analiza el primer factor
+        while (indiceActual < tokens.size() && 
+               (tokens.get(indiceActual).getTipo().equals("MULTIPLICACION") || 
+                tokens.get(indiceActual).getTipo().equals("DIVISION"))) {
+            siguienteToken(); // Consume el operador
+            factor(); // Consume el siguiente factor
+        }
+    }
+
+    private void factor() throws Exception {
+        // La producción 'factor -> identificador | numero | ( expresion )'
+        if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
+            siguienteToken(); // Consume el identificador
+        } else if (tokens.get(indiceActual).getTipo().equals("NUMERO")) {
+            siguienteToken(); // Consume el número
+        } else if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_IZQ")) {
+            siguienteToken(); // Consume '('
+            expresion(); // Analiza la expresión dentro del paréntesis
+            if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_DER")) {
+                siguienteToken(); // Consume ')'
+            } else {
+                throw new Exception("Se esperaba un paréntesis derecho.");
+            }
         } else {
-            throw new Exception("Se esperaba un número o un identificador.");
+            throw new Exception("Se esperaba un identificador, número o un paréntesis.");
         }
     }
 
