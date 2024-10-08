@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class FaseSintactica {
     private List<Token> tokens;
     private int indiceActual;
@@ -14,11 +13,11 @@ public class FaseSintactica {
     public FaseSintactica(List<Token> tokens) {
         this.tokens = tokens;
         this.indiceActual = 0;
-        this.lineaActual = 0;
+        this.lineaActual = 0; // Se utiliza para saber en que linea esta el error encontrado
         lista.add('N'); // N es igual a NO tiene par el parentesis inicial
         lista_numero.add('N'); // N es igual a NO es una asignacion
-        this.validar_parentesis = false;
-        this.validar_numeroSolo = false;
+        this.validar_parentesis = false; // Validacion para el error
+        this.validar_numeroSolo = false; // Validacion para el error
     }
 
     public void analizar() {
@@ -31,8 +30,9 @@ public class FaseSintactica {
         }
     }
 
+    // programa -> expresion ; { programa }
     private void programa() throws Exception {
-        // La estructura es 'expresion ; { programa }'
+
         while (indiceActual < tokens.size()) {
             lineaActual++;
             expresion(); // Analiza una expresión
@@ -46,17 +46,18 @@ public class FaseSintactica {
         }
     }
 
+    // expresion -> identificador = expresion | termino { ( +|- ) termino }
     private void expresion() throws Exception {
-        // La producción 'expresion -> identificador = expresion | termino { ( +|- ) termino }'
 
         if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
-            Token identificador = tokens.get(indiceActual);
+            
             siguienteToken(); // Consume el identificador
 
             if (tokens.get(indiceActual).getTipo().equals("ASIGNACION")) {
                 siguienteToken(); // Consume el signo '='
-                // Analiza la expresión del lado derecho
-                lista_numero.add('S'); // Se verifica que el numero es parte de una asignacion
+
+                // Se verifica que el numero es parte de una asignacion, S significa SI es parte de una asignacion
+                lista_numero.add('S'); 
                 expresion(); 
 
             } else {
@@ -78,30 +79,26 @@ public class FaseSintactica {
                    (tokens.get(indiceActual).getTipo().equals("SUMA") || 
                     tokens.get(indiceActual).getTipo().equals("RESTA"))) {
                 siguienteToken(); // Consume el operador
-                // Aquí es donde analizamos el siguiente término
                 termino(); // Consume el siguiente término
 
             }
         }
         
-        //---------------------VALIDACION PARENTESIS DER-----------------------------------
-        //System.out.println(lista);
-        System.out.println(tokens.get(indiceActual).getTipo());
-
+        // ----------- Validacion para revisar si hay parentesis derecho pero no izquierdo
         if ((tokens.get(indiceActual).getTipo().equals("PARENTESIS_DER")) && (lista.get(lista.size()-1) == 'N')) {
             validar_parentesis = true;
         } 
 
         if (!validar_parentesis) {
         } else {
-            throw new Exception("contiene un error en su gramatica, falta token ( (parentesis izquierdo)");
+            throw new Exception("contiene un error en su gramatica, falta token '(' (parentesis izquierdo)");
         }
 
-        
     }
 
+    // termino -> factor { ( * | / ) factor }
     private void termino() throws Exception {
-        // La producción 'termino -> factor { ( * | / ) factor }'
+
         factor(); // Analiza el primer factor
         while (indiceActual < tokens.size() && 
                (tokens.get(indiceActual).getTipo().equals("MULTIPLICACION") || 
@@ -111,17 +108,15 @@ public class FaseSintactica {
         }
     }
 
+    // factor -> identificador | numero | ( expresion )
     private void factor() throws Exception {
-        // La producción 'factor -> identificador | numero | ( expresion )'
         if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
             siguienteToken(); // Consume el identificador
 
         } else if (tokens.get(indiceActual).getTipo().equals("NUMERO")) {
             siguienteToken(); // Consume el número
 
-// -----------------------VALIDACION NUMERO SOLITO-----------------------
-            //System.out.println(lista_numero);
-            //System.out.println("VALIDAR NUMERO ="+ tokens.get(indiceActual));
+        // ------- Validacion en caso que haya un numero solo
             if(tokens.get(indiceActual).getTipo().equals("PUNTO_COMA") && (lista_numero.get(lista_numero.size()-1) == 'N')){
                 validar_numeroSolo = true;
             }
@@ -132,8 +127,10 @@ public class FaseSintactica {
             }
             
         } else if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_IZQ")) {
+            // Verificamos que SI hay un parentesis izquiero
             lista.add('S');
             validar_parentesis = false;
+
             siguienteToken(); // Consume '('
             expresion(); // Analiza la expresión dentro del paréntesis
             if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_DER")) {
@@ -141,6 +138,8 @@ public class FaseSintactica {
             } else {
                 throw new Exception("Se esperaba un parentesis derecho.");
             } 
+        
+            // Ya se completo '( )' por ende otra vez NO hay parentesis izquiero
             lista.add('N');
         } else {
             throw new Exception("Se esperaba un identificador, numero o un parentesis.");
