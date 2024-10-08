@@ -147,4 +147,6 @@ public class FaseLexica {
     public TablaSimbolos getTablaSimbolos() {
         return tablaSimbolos;
     }
+
+
 }

@@ -6,16 +6,15 @@ public class Main {
         FaseLexica analizadorLexico = new FaseLexica();
 
         try {
-            // Analizar el archivo y obtener los tokens
             analizadorLexico.analizarArchivo(archivo);
-
-            // Imprimir los tokens
+            System.out.println("FASE LEXICA: ");
             analizadorLexico.imprimirTokens();
 
-            // Imprimir la tabla de símbolos
-            analizadorLexico.getTablaSimbolos().imprimirTablaSimbolos();
-
-            // Llamar a la fase sintáctica
+            // Guardar la tabla de símbolos en un archivo
+            String archivoSalida = "tabla_simbolos.txt";
+            analizadorLexico.getTablaSimbolos().imprimirTablaSimbolos(archivoSalida);
+            System.out.println("Tabla de simbolos guardada en: " + archivoSalida);
+            System.out.println("FASE SINTACTICA: ");
             FaseSintactica analizadorSintactico = new FaseSintactica(analizadorLexico.getTokens());
             analizadorSintactico.analizar();
             

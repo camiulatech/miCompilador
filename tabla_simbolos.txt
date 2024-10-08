@@ -1,0 +1,3 @@
+Tabla de Simbolos:
+Identificador: a, Informacion: Linea: 1, Valor: 2
+Identificador: b, Informacion: Linea: 2, Valor: 3
