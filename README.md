@@ -6,5 +6,5 @@ Fabiana Arias Rosales, Ian Calvo Madrigal y Camila Ulate Chaves
 
 Comandos para ejecutar el programa en la línea de comandos.
 ``` bash 
-javac -d bin -sourcepath src -cp lib/* src/FaseLexica.java
-java -cp bin FaseLexica NOMBREPRUEBA.txt
+javac -d bin -sourcepath src -cp lib/* src/Main.java
+java -cp bin Main NOMBREPRUEBA.txt
