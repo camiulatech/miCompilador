@@ -19,7 +19,7 @@ public class Main {
             FaseSintactica analizadorSintactico = new FaseSintactica(analizadorLexico.getTokens());
             analizadorSintactico.analizar();
 
-           // analizadorSintactico.eliminarErroresTablaSimbolos("tabla_simbolos.txt");
+            analizadorSintactico.eliminarErroresTablaSimbolos("tabla_simbolos.txt");
             
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());

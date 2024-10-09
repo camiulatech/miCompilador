@@ -28,13 +28,17 @@ public class FaseSintactica {
         this.existe_error = false; //Se valida que no hayan errores
     }
 
-    public void analizar() {
+    public void analizar() throws Exception {
         try {
-            while (indiceActual < tokens.size()) {
+            while (indiceActual < tokens.size() && existe_error == false) {
                 programa(); // Comienza con la producción 'programa'
             }
         } catch (Exception e) {
             System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " " + e.getMessage());
+        }
+
+        if(existe_error){
+            throw new Exception("Error [Fase Sintactica]: Existe uno o mas errores en el proceso de la fase sintactica");
         }
     }
 
@@ -49,6 +53,9 @@ public class FaseSintactica {
                 lista_numero.add('N');
                 siguienteToken(); // Consume el punto y coma
             } else {
+                //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramática, falta token ;" );
+                existe_error = true;
+                errores_tablaSimbolos.add(lineaActual+1);
                 throw new Exception("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramática, falta token ;");
             }
         }
@@ -99,6 +106,9 @@ public class FaseSintactica {
 
         if (!validar_parentesis) {
         } else {
+            //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramatica, falta token '(' (parentesis izquierdo)");
+            errores_tablaSimbolos.add(lineaActual+1);
+            existe_error = true;
             throw new Exception("contiene un error en su gramatica, falta token '(' (parentesis izquierdo)");
         }
 
@@ -131,6 +141,9 @@ public class FaseSintactica {
              
             if (!validar_numeroSolo) {
             } else {
+                //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramática, el numero esta solo");
+                errores_tablaSimbolos.add(lineaActual+1);
+                existe_error = true;
                 throw new Exception("contiene un error en su gramática, el numero esta solo");
             }
             
@@ -144,12 +157,19 @@ public class FaseSintactica {
             if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_DER")) {
                 siguienteToken(); // Consume ')'
             } else {
+                //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " Se esperaba un parentesis derecho.");               
+                errores_tablaSimbolos.add(lineaActual+1);
+                existe_error = true;
                 throw new Exception("Se esperaba un parentesis derecho.");
             } 
         
             // Ya se completo '( )' por ende otra vez NO hay parentesis izquiero
             lista.add('N');
         } else {
+            //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " Se esperaba un identificador, numero o un parentesis.");               
+            errores_tablaSimbolos.add(lineaActual+1);
+            existe_error = true;
+
             throw new Exception("Se esperaba un identificador, numero o un parentesis.");
         }
     }
@@ -187,6 +207,6 @@ public class FaseSintactica {
         }  
         
     }
-    
-    
 }
+    
+    
