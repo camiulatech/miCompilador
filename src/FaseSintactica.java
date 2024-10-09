@@ -1,8 +1,8 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+//import java.util.Arrays;
+//import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+//import java.util.Set;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -143,46 +143,51 @@ public class FaseSintactica {
     private void factor() throws Exception {
         if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
             siguienteToken(); // Consume el identificador
-
+    
         } else if (tokens.get(indiceActual).getTipo().equals("NUMERO")) {
             siguienteToken(); // Consume el número
-
-        // ------- Validacion en caso que haya un numero solo
-            if(tokens.get(indiceActual).getTipo().equals("PUNTO_COMA") && (lista_numero.get(lista_numero.size()-1) == 'N')){
+    
+            // Validación para detectar números consecutivos sin un operador entre ellos
+            if (indiceActual < tokens.size() && tokens.get(indiceActual).getTipo().equals("NUMERO")) {
+                existe_error = true;
+                errores_tablaSimbolos.add(lineaActual + 1);
+                throw new Exception("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene números consecutivos sin operador.");
+            }
+    
+            // ------- Validación en caso que haya un número solo (sin estar asignado)
+            if (tokens.get(indiceActual).getTipo().equals("PUNTO_COMA") && (lista_numero.get(lista_numero.size() - 1) == 'N')) {
                 validar_numeroSolo = true;
             }
-             
+    
             if (!validar_numeroSolo) {
+                // Todo correcto, continuar
             } else {
-                //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramática, el numero esta solo");
-                errores_tablaSimbolos.add(lineaActual+1);
+                errores_tablaSimbolos.add(lineaActual + 1);
                 existe_error = true;
-                throw new Exception("contiene un error en su gramatica, el numero esta solo");
+                throw new Exception("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un número que está solo.");
             }
-            
+    
         } else if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_IZQ")) {
-            // Verificamos que SI hay un parentesis izquiero
+            // Verificamos que SI hay un paréntesis izquierdo
             lista.add('S');
             validar_parentesis = false;
-
+    
             siguienteToken(); // Consume '('
             expresion(); // Analiza la expresión dentro del paréntesis
             if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_DER")) {
                 siguienteToken(); // Consume ')'
             } else {
-                //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " Se esperaba un parentesis derecho.");               
-                errores_tablaSimbolos.add(lineaActual+1);
+                errores_tablaSimbolos.add(lineaActual + 1);
                 existe_error = true;
-                throw new Exception("Se esperaba un parentesis derecho.");
-            } 
-        
-            // Ya se completo '( )' por ende otra vez NO hay parentesis izquiero
+                throw new Exception("Error [Fase Sintactica]: Se esperaba un paréntesis derecho.");
+            }
+    
+            // Ya se completó '( )', por ende otra vez NO hay paréntesis izquierdo
             lista.add('N');
         } else {
-            //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " Se esperaba un identificador, numero o un parentesis.");               
-            errores_tablaSimbolos.add(lineaActual+1);
+            errores_tablaSimbolos.add(lineaActual + 1);
             existe_error = true;
-            throw new Exception("Se esperaba un identificador, numero o un parentesis.");
+            throw new Exception("Error [Fase Sintactica]: Se esperaba un identificador, número o un paréntesis.");
         }
     }
 

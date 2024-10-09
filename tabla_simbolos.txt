@@ -1,5 +1,6 @@
 Tabla de Simbolos:
 Identificador: cami, Informacion: Linea: 1, Valor: 1
 Identificador: yis, Informacion: Linea: 2, Valor: (6 / 1)
+Identificador: yoswi, Informacion: Linea: 3, Valor: (7 * 9) * 0
+Identificador: yurgen, Informacion: Linea: 4, Valor: 7
 Identificador: raul, Informacion: Linea: 5, Valor: 0
-Identificador: leo, Informacion: Linea: 6, Valor: 9 /8
