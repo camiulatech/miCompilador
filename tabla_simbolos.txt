@@ -1,5 +1,3 @@
 Tabla de Simbolos:
-Identificador: a, Informacion: Linea: 1, Valor: 42
-Identificador: b, Informacion: Linea: 2, Valor: a - 7
-Identificador: c, Informacion: Linea: 3, Valor: (a + b)
-Identificador: e, Informacion: Linea: 5, Valor: 4
+Identificador: cami, Informacion: Linea: 1, Valor: 0
+Identificador: leo, Informacion: Linea: 3, Valor: (9 /8)

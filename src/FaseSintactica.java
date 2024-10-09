@@ -1,5 +1,8 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -16,6 +19,7 @@ public class FaseSintactica {
     private List<Character> lista = new ArrayList<>();
     private List<Character> lista_numero = new ArrayList<>();
     List<Integer> errores_tablaSimbolos = new ArrayList<>();
+    List<String> errores_tokens = new ArrayList<>();
 
     public FaseSintactica(List<Token> tokens) {
         this.tokens = tokens;
@@ -26,24 +30,27 @@ public class FaseSintactica {
         this.validar_parentesis = false; // Validacion para el error
         this.validar_numeroSolo = false; // Validacion para el error
         this.existe_error = false; //Se valida que no hayan errores
-
-        this.tokens.add(new Token("EOF", "$"));
-
+        
     }
 
     public void analizar() throws Exception {
         try {
-            while (indiceActual < tokens.size() && existe_error == false) {
+            while (indiceActual < tokens.size() && !existe_error) {
                 programa(); // Comienza con la producción 'programa'
             }
+        } catch (IndexOutOfBoundsException e) { //cuando detecta un indice fuera de sus limites significa que falta ;
+            // Captura el IndexOutOfBoundsException y muestra un mensaje específico
+            existe_error = true;
+            
+            System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " falta token ';'");
         } catch (Exception e) {
+
             eliminarErroresTablaSimbolos("tabla_simbolos.txt");
             System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " " + e.getMessage());
-            errores_tablaSimbolos.add(lineaActual+1);
         }
-
-        if(existe_error){
-            throw new Exception("Error [Fase Sintactica]: Existe uno o mas errores en el proceso de la fase sintactica");
+    
+        if (existe_error) {
+            throw new Exception("Error [Fase Sintactica]: Existe uno o más errores en el proceso de la fase sintáctica");
         }
     }
 
@@ -51,18 +58,14 @@ public class FaseSintactica {
     private void programa() throws Exception {
 
         while (indiceActual < tokens.size()) {
-
-            if (tokens.get(indiceActual).getTipo().equals("EOF")) {
-                break; // Si el token es EOF, detiene el análisis
-            }
-
             lineaActual++;
             expresion(); // Analiza una expresión
 
             if (tokens.get(indiceActual).getTipo().equals("PUNTO_COMA")) {
                 lista_numero.add('N');
-                siguienteToken(); // Consume el punto y coma
-            } else {
+                siguienteToken();
+            }
+             else {
                 //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramática, falta token ;" );
                 existe_error = true;
                 errores_tablaSimbolos.add(lineaActual+1);
@@ -190,18 +193,18 @@ public class FaseSintactica {
         }
     }
 
-    public void eliminarErroresTablaSimbolos(String archivoTablaSimbolos) throws IOException {
-        // Cargar todas las líneas en una lista
+public void eliminarErroresTablaSimbolos(String archivoTablaSimbolos) throws IOException {
+        // Lista para almacenar las líneas válidas
         List<String> lineasValidas = new ArrayList<>();
         
-        // Leer el archivo de la tabla de símbolos
+        // Leer el archivo y filtrar las líneas
         try (BufferedReader br = new BufferedReader(new FileReader(archivoTablaSimbolos))) {
             String linea;
             int numeroLinea = 1;
 
-            System.out.println(errores_tablaSimbolos);
             // Leer cada línea y agregar las válidas
             while ((linea = br.readLine()) != null) {
+                // Si el número de línea no está en errores_tablaSimbolos, agregar a lineasValidas
                 if (!errores_tablaSimbolos.contains(numeroLinea)) {
                     lineasValidas.add(linea); // Agregar línea válida a la lista
                 }
@@ -209,15 +212,16 @@ public class FaseSintactica {
             }
         }
 
-        // Sobrescribir el archivo con las líneas válidas
+        // Escribir las líneas válidas nuevamente en el archivo
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTablaSimbolos))) {
-            for (String lineaValida : lineasValidas) {
-                bw.write(lineaValida);
-                bw.newLine();
+            for (String linea : lineasValidas) {
+                bw.write(linea);
+                bw.newLine(); // Escribir nueva línea
             }
-        }  
-        
+        }
     }
+
+
 }
     
     

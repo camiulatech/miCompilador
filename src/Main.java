@@ -12,7 +12,7 @@ public class Main {
 
             // Guardar la tabla de símbolos en un archivo
             String archivoSalida = "tabla_simbolos.txt";
-            analizadorLexico.getTablaSimbolos().imprimirTablaSimbolos(archivoSalida);
+            analizadorLexico.getTablaSimbolos().guardarTablaSimbolos(archivoSalida);
             System.out.println("Tabla de simbolos guardada en: " + archivoSalida);
             
             System.out.println("FASE SINTACTICA: ");
