@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class FaseSintactica {
     private List<Token> tokens;
@@ -7,8 +12,10 @@ public class FaseSintactica {
     private int lineaActual;
     private boolean validar_parentesis;
     private boolean validar_numeroSolo;
+    private boolean existe_error;
     private List<Character> lista = new ArrayList<>();
     private List<Character> lista_numero = new ArrayList<>();
+    List<Integer> errores_tablaSimbolos = new ArrayList<>();
 
     public FaseSintactica(List<Token> tokens) {
         this.tokens = tokens;
@@ -18,6 +25,7 @@ public class FaseSintactica {
         lista_numero.add('N'); // N es igual a NO es una asignacion
         this.validar_parentesis = false; // Validacion para el error
         this.validar_numeroSolo = false; // Validacion para el error
+        this.existe_error = false; //Se valida que no hayan errores
     }
 
     public void analizar() {
@@ -151,4 +159,34 @@ public class FaseSintactica {
             indiceActual++;
         }
     }
+
+    public void eliminarErroresTablaSimbolos(String archivoTablaSimbolos) throws IOException {
+        // Cargar todas las líneas en una lista
+        List<String> lineasValidas = new ArrayList<>();
+        
+        // Leer el archivo de la tabla de símbolos
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoTablaSimbolos))) {
+            String linea;
+            int numeroLinea = 1;
+
+            // Leer cada línea y agregar las válidas
+            while ((linea = br.readLine()) != null) {
+                if (!errores_tablaSimbolos.contains(numeroLinea)) {
+                    lineasValidas.add(linea); // Agregar línea válida a la lista
+                }
+                numeroLinea++;
+            }
+        }
+
+        // Sobrescribir el archivo con las líneas válidas
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTablaSimbolos))) {
+            for (String lineaValida : lineasValidas) {
+                bw.write(lineaValida);
+                bw.newLine();
+            }
+        }  
+        
+    }
+    
+    
 }

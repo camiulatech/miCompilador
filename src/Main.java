@@ -14,9 +14,12 @@ public class Main {
             String archivoSalida = "tabla_simbolos.txt";
             analizadorLexico.getTablaSimbolos().imprimirTablaSimbolos(archivoSalida);
             System.out.println("Tabla de simbolos guardada en: " + archivoSalida);
+            
             System.out.println("FASE SINTACTICA: ");
             FaseSintactica analizadorSintactico = new FaseSintactica(analizadorLexico.getTokens());
             analizadorSintactico.analizar();
+
+           // analizadorSintactico.eliminarErroresTablaSimbolos("tabla_simbolos.txt");
             
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());
