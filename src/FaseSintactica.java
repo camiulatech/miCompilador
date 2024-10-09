@@ -34,6 +34,7 @@ public class FaseSintactica {
                 programa(); // Comienza con la producción 'programa'
             }
         } catch (Exception e) {
+            eliminarErroresTablaSimbolos("tabla_simbolos.txt");
             System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " " + e.getMessage());
         }
 
