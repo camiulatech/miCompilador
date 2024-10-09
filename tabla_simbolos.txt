@@ -1,3 +1,5 @@
 Tabla de Simbolos:
-Identificador: cami, Informacion: Linea: 1, Valor: 0
-Identificador: leo, Informacion: Linea: 3, Valor: (9 /8)
+Identificador: cami, Informacion: Linea: 1, Valor: 1
+Identificador: yis, Informacion: Linea: 2, Valor: (6 / 1)
+Identificador: raul, Informacion: Linea: 5, Valor: 0
+Identificador: leo, Informacion: Linea: 6, Valor: 9 /8

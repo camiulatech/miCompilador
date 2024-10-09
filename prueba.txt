@@ -1,3 +1,6 @@
-cami = 0;
-yurgen = 7
-leo = (9 /8);
+cami = 1;
+yis = (6 / 1);
+yoswi = (7 * 9) * 0
+yurgen = 7;
+raul = 0;
+leo = 9 /8

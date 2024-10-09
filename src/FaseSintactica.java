@@ -41,17 +41,17 @@ public class FaseSintactica {
         } catch (IndexOutOfBoundsException e) { //cuando detecta un indice fuera de sus limites significa que falta ;
             // Captura el IndexOutOfBoundsException y muestra un mensaje específico
             existe_error = true;
-            
+            errores_tablaSimbolos.add(lineaActual+1);
             System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " falta token ';'");
         } catch (Exception e) {
-
+            errores_tablaSimbolos.add(lineaActual+1);
             eliminarErroresTablaSimbolos("tabla_simbolos.txt");
             System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " " + e.getMessage());
         }
     
-        if (existe_error) {
-            throw new Exception("Error [Fase Sintactica]: Existe uno o más errores en el proceso de la fase sintáctica");
-        }
+        //if (existe_error) {
+        //    throw new Exception("Error [Fase Sintactica]: Existe uno o mas errores en el proceso de la fase sintáctica");
+        //}
     }
 
     // programa -> expresion ; { programa }
@@ -69,7 +69,7 @@ public class FaseSintactica {
                 //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramática, falta token ;" );
                 existe_error = true;
                 errores_tablaSimbolos.add(lineaActual+1);
-                throw new Exception("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramática, falta token ;");
+                throw new Exception("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramatica, falta token ;");
             }
         }
     }
@@ -157,7 +157,7 @@ public class FaseSintactica {
                 //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramática, el numero esta solo");
                 errores_tablaSimbolos.add(lineaActual+1);
                 existe_error = true;
-                throw new Exception("contiene un error en su gramática, el numero esta solo");
+                throw new Exception("contiene un error en su gramatica, el numero esta solo");
             }
             
         } else if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_IZQ")) {
@@ -182,7 +182,6 @@ public class FaseSintactica {
             //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " Se esperaba un identificador, numero o un parentesis.");               
             errores_tablaSimbolos.add(lineaActual+1);
             existe_error = true;
-
             throw new Exception("Se esperaba un identificador, numero o un parentesis.");
         }
     }
