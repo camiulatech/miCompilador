@@ -1,7 +1,0 @@
-x = 5 * 2;
-identificadorlexer = x + 3 ;
-numero1 = linea * 2 / y ;
-numero2 = 10 - x ;
-z = 20 * 5; 
-numero3 = z / numero2;
-

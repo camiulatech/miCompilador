@@ -1,6 +1,0 @@
-inicio=20
-posicion=10+(inicio*2);
-actual=posicion/(4+1);
-solucion=200-(actual*posicion);
-
-
