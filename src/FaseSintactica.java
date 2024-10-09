@@ -1,8 +1,5 @@
 import java.util.ArrayList;
-//import java.util.Arrays;
-//import java.util.HashSet;
 import java.util.List;
-//import java.util.Set;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -19,7 +16,7 @@ public class FaseSintactica {
     private List<Character> lista = new ArrayList<>();
     private List<Character> lista_numero = new ArrayList<>();
     List<Integer> errores_tablaSimbolos = new ArrayList<>();
-    List<String> errores_tokens = new ArrayList<>();
+    List<String> errores_tokens = new ArrayList<>(); // Se utiliza para saber que linea eliminar del txt en caso de un error
 
     public FaseSintactica(List<Token> tokens) {
         this.tokens = tokens;
@@ -36,22 +33,19 @@ public class FaseSintactica {
     public void analizar() throws Exception {
         try {
             while (indiceActual < tokens.size() && !existe_error) {
-                programa(); // Comienza con la producción 'programa'
+                programa();
             }
-        } catch (IndexOutOfBoundsException e) { //cuando detecta un indice fuera de sus limites significa que falta ;
-            // Captura el IndexOutOfBoundsException y muestra un mensaje específico
+        } catch (IndexOutOfBoundsException e) { 
+            //cuando detecta un indice fuera de sus limites significa que falta ;
             existe_error = true;
             errores_tablaSimbolos.add(lineaActual+1);
-            System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " falta token ';'");
+            System.out.println(" contiene un error en su gramatica, falta token ;");
+
         } catch (Exception e) {
             errores_tablaSimbolos.add(lineaActual+1);
-            eliminarErroresTablaSimbolos("tabla_simbolos.txt");
-            System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " " + e.getMessage());
+            eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
+            System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + e.getMessage());
         }
-    
-        //if (existe_error) {
-        //    throw new Exception("Error [Fase Sintactica]: Existe uno o mas errores en el proceso de la fase sintáctica");
-        //}
     }
 
     // programa -> expresion ; { programa }
@@ -66,10 +60,9 @@ public class FaseSintactica {
                 siguienteToken();
             }
              else {
-                //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramática, falta token ;" );
                 existe_error = true;
                 errores_tablaSimbolos.add(lineaActual+1);
-                throw new Exception("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramatica, falta token ;");
+                throw new Exception(" contiene un error en su gramatica, falta token ;");
             }
         }
     }
@@ -90,7 +83,7 @@ public class FaseSintactica {
 
             } else {
                 // Si no hay una asignación, retrocede para permitir que la expresión continúe
-                indiceActual--; // Regresar un token para analizar la expresión
+                indiceActual--; 
                 termino(); // Comenzar la expresión
                 while (indiceActual < tokens.size() && 
                        (tokens.get(indiceActual).getTipo().equals("SUMA") || 
@@ -102,9 +95,8 @@ public class FaseSintactica {
         } else {
             // Si no es un identificador, se comienza con un término
             termino();
-            // Verifica si hay más operadores
-            while (indiceActual < tokens.size() && 
-                   (tokens.get(indiceActual).getTipo().equals("SUMA") || 
+                while (indiceActual < tokens.size() && 
+                    (tokens.get(indiceActual).getTipo().equals("SUMA") || 
                     tokens.get(indiceActual).getTipo().equals("RESTA"))) {
                 siguienteToken(); // Consume el operador
                 termino(); // Consume el siguiente término
@@ -119,10 +111,9 @@ public class FaseSintactica {
 
         if (!validar_parentesis) {
         } else {
-            //System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un error en su gramatica, falta token '(' (parentesis izquierdo)");
             errores_tablaSimbolos.add(lineaActual+1);
             existe_error = true;
-            throw new Exception("contiene un error en su gramatica, falta token '(' (parentesis izquierdo)");
+            throw new Exception(" contiene un error en su gramatica, falta token '(' (parentesis izquierdo)");
         }
 
     }
@@ -151,7 +142,7 @@ public class FaseSintactica {
             if (indiceActual < tokens.size() && tokens.get(indiceActual).getTipo().equals("NUMERO")) {
                 existe_error = true;
                 errores_tablaSimbolos.add(lineaActual + 1);
-                throw new Exception("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene números consecutivos sin operador.");
+                throw new Exception(" contiene números consecutivos sin operador.");
             }
     
             // ------- Validación en caso que haya un número solo (sin estar asignado)
@@ -160,11 +151,10 @@ public class FaseSintactica {
             }
     
             if (!validar_numeroSolo) {
-                // Todo correcto, continuar
             } else {
                 errores_tablaSimbolos.add(lineaActual + 1);
                 existe_error = true;
-                throw new Exception("Error [Fase Sintactica]: La linea " + (lineaActual) + " contiene un número que está solo.");
+                throw new Exception(" contiene un número que está solo.");
             }
     
         } else if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_IZQ")) {
@@ -173,13 +163,13 @@ public class FaseSintactica {
             validar_parentesis = false;
     
             siguienteToken(); // Consume '('
-            expresion(); // Analiza la expresión dentro del paréntesis
+            expresion(); 
             if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_DER")) {
                 siguienteToken(); // Consume ')'
             } else {
                 errores_tablaSimbolos.add(lineaActual + 1);
                 existe_error = true;
-                throw new Exception("Error [Fase Sintactica]: Se esperaba un paréntesis derecho.");
+                throw new Exception(" se esperaba un parentesis derecho.");
             }
     
             // Ya se completó '( )', por ende otra vez NO hay paréntesis izquierdo
@@ -187,7 +177,7 @@ public class FaseSintactica {
         } else {
             errores_tablaSimbolos.add(lineaActual + 1);
             existe_error = true;
-            throw new Exception("Error [Fase Sintactica]: Se esperaba un identificador, número o un paréntesis.");
+            throw new Exception(" se esperaba un identificador, numero o un parentesis.");
         }
     }
 
@@ -208,9 +198,8 @@ public void eliminarErroresTablaSimbolos(String archivoTablaSimbolos) throws IOE
 
             // Leer cada línea y agregar las válidas
             while ((linea = br.readLine()) != null) {
-                // Si el número de línea no está en errores_tablaSimbolos, agregar a lineasValidas
                 if (!errores_tablaSimbolos.contains(numeroLinea)) {
-                    lineasValidas.add(linea); // Agregar línea válida a la lista
+                    lineasValidas.add(linea); 
                 }
                 numeroLinea++;
             }
@@ -220,11 +209,10 @@ public void eliminarErroresTablaSimbolos(String archivoTablaSimbolos) throws IOE
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTablaSimbolos))) {
             for (String linea : lineasValidas) {
                 bw.write(linea);
-                bw.newLine(); // Escribir nueva línea
+                bw.newLine(); 
             }
         }
     }
-
 
 }
     

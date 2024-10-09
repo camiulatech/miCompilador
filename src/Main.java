@@ -11,7 +11,7 @@ public class Main {
             analizadorLexico.imprimirTokens();
 
             // Guardar la tabla de símbolos en un archivo
-            String archivoSalida = "tabla_simbolos.txt";
+            String archivoSalida = "tablaDeSimbolos.txt";
             analizadorLexico.getTablaSimbolos().guardarTablaSimbolos(archivoSalida);
             System.out.println("Tabla de simbolos guardada en: " + archivoSalida);
             
@@ -19,7 +19,7 @@ public class Main {
             FaseSintactica analizadorSintactico = new FaseSintactica(analizadorLexico.getTokens());
             analizadorSintactico.analizar();
 
-            analizadorSintactico.eliminarErroresTablaSimbolos("tabla_simbolos.txt");
+            analizadorSintactico.eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
             
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());
