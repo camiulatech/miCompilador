@@ -1,4 +1,5 @@
 Tabla de Simbolos:
-Identificador: a, Informacion: Linea: 1, Valor: 2
-Identificador: cami, Informacion: Linea: 3, Valor: 3 + 1 )
-Identificador: camila, Informacion: Linea: 4, Valor: 5
+Identificador: a, Informacion: Linea: 1, Valor: 42
+Identificador: b, Informacion: Linea: 2, Valor: a - 7
+Identificador: c, Informacion: Linea: 3, Valor: (a + b)
+Identificador: e, Informacion: Linea: 5, Valor: 4

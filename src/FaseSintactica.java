@@ -26,6 +26,9 @@ public class FaseSintactica {
         this.validar_parentesis = false; // Validacion para el error
         this.validar_numeroSolo = false; // Validacion para el error
         this.existe_error = false; //Se valida que no hayan errores
+
+        this.tokens.add(new Token("EOF", "$"));
+
     }
 
     public void analizar() throws Exception {
@@ -36,6 +39,7 @@ public class FaseSintactica {
         } catch (Exception e) {
             eliminarErroresTablaSimbolos("tabla_simbolos.txt");
             System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + " " + e.getMessage());
+            errores_tablaSimbolos.add(lineaActual+1);
         }
 
         if(existe_error){
@@ -47,6 +51,11 @@ public class FaseSintactica {
     private void programa() throws Exception {
 
         while (indiceActual < tokens.size()) {
+
+            if (tokens.get(indiceActual).getTipo().equals("EOF")) {
+                break; // Si el token es EOF, detiene el análisis
+            }
+
             lineaActual++;
             expresion(); // Analiza una expresión
 
@@ -190,6 +199,7 @@ public class FaseSintactica {
             String linea;
             int numeroLinea = 1;
 
+            System.out.println(errores_tablaSimbolos);
             // Leer cada línea y agregar las válidas
             while ((linea = br.readLine()) != null) {
                 if (!errores_tablaSimbolos.contains(numeroLinea)) {
