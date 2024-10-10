@@ -123,7 +123,6 @@ public class FaseSintactica {
             existe_error = true;
             throw new Exception(" contiene un error en su gramatica, falta token '(' (parentesis izquierdo)");
         }
-
     }
 
     // termino -> factor { ( * | / ) factor }

@@ -19,6 +19,8 @@ public class Main {
             System.out.println("\n" + "Tabla de simbolos guardada en: " + archivoSalida);
             
             System.out.println("\n" + "FASE SINTACTICA: ");
+        
+            //Inicio Fase Sintactica
             FaseSintactica analizadorSintactico = new FaseSintactica(analizadorLexico.getTokens());
             analizadorSintactico.analizar();
             
