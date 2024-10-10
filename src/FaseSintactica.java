@@ -15,8 +15,7 @@ public class FaseSintactica {
     private boolean existe_error;
     private List<Character> lista = new ArrayList<>();
     private List<Character> lista_numero = new ArrayList<>();
-    List<Integer> errores_tablaSimbolos = new ArrayList<>();
-    List<String> errores_tokens = new ArrayList<>(); // Se utiliza para saber que linea eliminar del txt en caso de un error
+    List<Integer> errores_tablaSimbolos = new ArrayList<>(); // Se utiliza para saber que linea eliminar del txt en caso de un error
 
     public FaseSintactica(List<Token> tokens) {
         this.tokens = tokens;
@@ -36,7 +35,7 @@ public class FaseSintactica {
                 programa();
             }
         } catch (IndexOutOfBoundsException e) { 
-            //cuando detecta un indice fuera de sus limites significa que falta ;
+            // cuando detecta un indice fuera de sus limites significa que falta ;
             existe_error = true;
             errores_tablaSimbolos.add(lineaActual+1);
             System.out.println(" contiene un error en su gramatica, falta token ;");
@@ -65,7 +64,7 @@ public class FaseSintactica {
                 siguienteToken();
             }
              else {
-                existe_error = true; //Detecta la falta de punto y coma en una sentencia 
+                existe_error = true; // Detecta la falta de punto y coma en una sentencia 
                 errores_tablaSimbolos.add(lineaActual+1);
                 throw new Exception(" contiene un error en su gramatica, falta token ;");
             }
@@ -77,24 +76,24 @@ public class FaseSintactica {
 
         if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
             
-            siguienteToken(); // Consume el identificador
+            siguienteToken(); 
 
             if (tokens.get(indiceActual).getTipo().equals("ASIGNACION")) {
-                siguienteToken(); // Consume el signo '='
+                siguienteToken(); // toma el signo '='
 
                 // Se verifica que el numero es parte de una asignacion, S significa SI es parte de una asignacion
                 lista_numero.add('S'); 
                 expresion(); 
 
             } else {
-                // Si no hay una asignación, retrocede para permitir que la expresión continúe
+                // Si no hay una asignacion, retrocede para probar otro camino
                 indiceActual--; 
-                termino(); // Comenzar la expresión
+                termino(); 
                 while (indiceActual < tokens.size() && 
                        (tokens.get(indiceActual).getTipo().equals("SUMA") || 
                         tokens.get(indiceActual).getTipo().equals("RESTA"))) {
-                    siguienteToken(); // Consume el operador
-                    termino(); // Consume el siguiente término
+                    siguienteToken(); 
+                    termino(); 
                 }
             }
         } else {
@@ -103,13 +102,13 @@ public class FaseSintactica {
                 while (indiceActual < tokens.size() && 
                     (tokens.get(indiceActual).getTipo().equals("SUMA") || 
                     tokens.get(indiceActual).getTipo().equals("RESTA"))) {
-                siguienteToken(); // Consume el operador
-                termino(); // Consume el siguiente término
+                siguienteToken(); 
+                termino(); 
 
             }
         }
         
-        // ----------- Validacion para revisar si hay parentesis derecho pero no izquierdo
+        //  Validacion para revisar si hay parentesis derecho pero no izquierdo
         if ((tokens.get(indiceActual).getTipo().equals("PARENTESIS_DER")) && (lista.get(lista.size()-1) == 'N')) {
             validar_parentesis = true;
         } 
@@ -125,21 +124,21 @@ public class FaseSintactica {
 
     // termino -> factor { ( * | / ) factor }
     private void termino() throws Exception {
-        factor(); // Analiza el primer factor
+        factor(); 
     
         while (indiceActual < tokens.size() && 
                (tokens.get(indiceActual).getTipo().equals("MULTIPLICACION") || 
                 tokens.get(indiceActual).getTipo().equals("DIVISION"))) {
-            siguienteToken(); // Consume el operador
+            siguienteToken(); 
     
-            // Verificación: ¿Hay más tokens después del operador?
+            // Validacion que hayan mas tokens despues del operador
             if (indiceActual >= tokens.size()) {
                 existe_error = true;
                 errores_tablaSimbolos.add(lineaActual + 1);
                 throw new Exception(" contiene un operador sin un término después de él.");
             }
     
-            // Verificación: después de un operador debe haber un término válido
+            // Validacion despues de un operador debe haber un término válido
             if (!tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR") && 
                 !tokens.get(indiceActual).getTipo().equals("NUMERO") && 
                 !tokens.get(indiceActual).getTipo().equals("PARENTESIS_IZQ")) {
@@ -147,29 +146,26 @@ public class FaseSintactica {
                 errores_tablaSimbolos.add(lineaActual + 1);
                 throw new Exception(" contiene un operador sin un término válido después de él.");
             }
-    
-            factor(); // Consume el siguiente término
+            factor();
         }
     }
     
-
-
     // factor -> identificador | numero | ( expresion )
     private void factor() throws Exception {
         if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
-            siguienteToken(); // Consume el identificador
+            siguienteToken(); // toma el identificador
     
         } else if (tokens.get(indiceActual).getTipo().equals("NUMERO")) {
-            siguienteToken(); // Consume el número
+            siguienteToken(); // toma el número
     
-            // Validación para detectar números consecutivos sin un operador entre ellos
+            // Validacion para detectar números consecutivos sin un operador entre ellos
             if (indiceActual < tokens.size() && tokens.get(indiceActual).getTipo().equals("NUMERO")) {
                 existe_error = true;
                 errores_tablaSimbolos.add(lineaActual + 1);
                 throw new Exception(" contiene números consecutivos sin operador.");
             }
     
-            // ------- Validación en caso que haya un número solo (sin estar asignado)
+            // Validacion en caso que haya un número solo (sin estar asignado)
             if (tokens.get(indiceActual).getTipo().equals("PUNTO_COMA") && (lista_numero.get(lista_numero.size() - 1) == 'N')) {
                 validar_numeroSolo = true;
             }
@@ -186,10 +182,10 @@ public class FaseSintactica {
             lista.add('S');
             validar_parentesis = false;
     
-            siguienteToken(); // Consume '('
+            siguienteToken(); // toma '('
             expresion(); 
             if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_DER")) {
-                siguienteToken(); // Consume ')'
+                siguienteToken(); // toma ')'
             } else {
                 errores_tablaSimbolos.add(lineaActual + 1);
                 existe_error = true;
@@ -212,15 +208,15 @@ public class FaseSintactica {
     }
 
 public void eliminarErroresTablaSimbolos(String archivoTablaSimbolos) throws IOException {
-        // Lista para almacenar las líneas válidas
+        // lista para almacenar las lineas validas
         List<String> lineasValidas = new ArrayList<>();
         
-        // Leer el archivo y filtrar las líneas
+        // lee el archivo y filtrar las lineas
         try (BufferedReader br = new BufferedReader(new FileReader(archivoTablaSimbolos))) {
             String linea;
             int numeroLinea = 1;
 
-            // Agrega solo las líneas que no están en la lista de errores
+            // Agrega solo las lineas que no están en la lista de errores
             while ((linea = br.readLine()) != null) {
                 if (!errores_tablaSimbolos.contains(numeroLinea)) {
                     lineasValidas.add(linea); 
@@ -229,11 +225,10 @@ public void eliminarErroresTablaSimbolos(String archivoTablaSimbolos) throws IOE
             }
         }
 
-        // Reescribe el archivo con las líneas válidas, eliminando las que contienen errores
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTablaSimbolos))) {
             for (String linea : lineasValidas) {
                 bw.write(linea);
-                bw.newLine(); // Añade salto de línea después de cada línea válida
+                bw.newLine();
             }
         }
     }
