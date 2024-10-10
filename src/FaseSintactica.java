@@ -29,7 +29,8 @@ public class FaseSintactica {
         
     }
 
-    public void analizar() throws Exception { //Funcion encargada de realizar los analisis de las lineas de codigo
+    //Funcion encargada de realizar los analisis de las lineas de codigo
+    public void analizar() throws Exception { 
         try {
             while (indiceActual < tokens.size() && !existe_error) {
                 programa();
@@ -44,11 +45,13 @@ public class FaseSintactica {
             existe_error = true; //Se detecto un error
             errores_tablaSimbolos.add(lineaActual+1);
             eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
-            System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + e.getMessage()); //Salta el mensaje de error junto a la linea y el tipo del mismo
+            //Salta el mensaje de error junto a la linea y el tipo del mismo
+            System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + e.getMessage()); 
         }
-
+        
+        //En caso de no encontrar error indica el exito del programa 
         if(!existe_error){
-            System.out.println("Se logro completar la fase sintactica correctamente"); //En caso de no encontrar error indica el exito del programa 
+            System.out.println("Se logro completar la fase sintactica correctamente"); 
         }
     }
 
@@ -201,7 +204,7 @@ public class FaseSintactica {
         }
     }
 
-    private void siguienteToken() { //Recorre la lista de tokens de una sentencia 
+    private void siguienteToken() { // Recorre la lista de tokens de una sentencia 
         if (indiceActual < tokens.size()) {
             indiceActual++; //va incrementando el indice 
         }
