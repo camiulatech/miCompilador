@@ -42,9 +42,14 @@ public class FaseSintactica {
             System.out.println(" contiene un error en su gramatica, falta token ;");
 
         } catch (Exception e) {
+            existe_error = true;
             errores_tablaSimbolos.add(lineaActual+1);
             eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
             System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + e.getMessage());
+        }
+
+        if(!existe_error){
+            System.out.println("Se logro completar la fase sintactica correctamente");
         }
     }
 
@@ -196,7 +201,6 @@ public void eliminarErroresTablaSimbolos(String archivoTablaSimbolos) throws IOE
             String linea;
             int numeroLinea = 1;
 
-            // Leer cada línea y agregar las válidas
             while ((linea = br.readLine()) != null) {
                 if (!errores_tablaSimbolos.contains(numeroLinea)) {
                     lineasValidas.add(linea); 
@@ -205,7 +209,6 @@ public void eliminarErroresTablaSimbolos(String archivoTablaSimbolos) throws IOE
             }
         }
 
-        // Escribir las líneas válidas nuevamente en el archivo
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTablaSimbolos))) {
             for (String linea : lineasValidas) {
                 bw.write(linea);

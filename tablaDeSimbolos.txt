@@ -2,5 +2,4 @@ Tabla de Simbolos:
 Identificador: e, Informacion: Linea: 1, Valor: 21 + 31
 Identificador: c, Informacion: Linea: 2, Valor: e + 2
 Identificador: f, Informacion: Linea: 3, Valor: 50
-Identificador: j, Informacion: Linea: 4, Valor: (7 / 3) * 15
-Identificador: i, Informacion: Linea: 5, Valor: c + f
+Identificador: k, Informacion: Linea: 6, Valor: 40 - c)
