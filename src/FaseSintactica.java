@@ -37,6 +37,7 @@ public class FaseSintactica {
             }
         } catch (IndexOutOfBoundsException e) { 
             // cuando detecta un indice fuera de sus limites significa que falta ;
+            eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
             existe_error = true;
             errores_tablaSimbolos.add(lineaActual+1);
             System.out.println(" contiene un error en su gramatica, falta token ;");
@@ -48,7 +49,7 @@ public class FaseSintactica {
             //Salta el mensaje de error junto a la linea y el tipo del mismo
             System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + e.getMessage()); 
         }
-        
+
         //En caso de no encontrar error indica el exito del programa 
         if(!existe_error){
             System.out.println("Se logro completar la fase sintactica correctamente"); 
