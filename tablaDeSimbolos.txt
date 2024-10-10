@@ -2,6 +2,4 @@ Tabla de Simbolos:
 Identificador: x, Informacion: Linea: 1, Valor: 20
 Identificador: y, Informacion: Linea: 2, Valor: x - 10
 Identificador: t, Informacion: Linea: 3, Valor: (5 * 10)
-Identificador: d, Informacion: Linea: 4, Valor: j
-Identificador: j, Informacion: Linea: 4, Valor: j
-Identificador: v, Informacion: Linea: 5, Valor: (x / 2) + 2
+Identificador: v, Informacion: Linea: 4, Valor: (x / 2) + 2
