@@ -21,8 +21,6 @@ public class Main {
             System.out.println("\n" + "FASE SINTACTICA: ");
             FaseSintactica analizadorSintactico = new FaseSintactica(analizadorLexico.getTokens());
             analizadorSintactico.analizar();
-
-            analizadorSintactico.eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
             
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());

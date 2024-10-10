@@ -1,5 +1,3 @@
 Tabla de Simbolos:
-Identificador: e, Informacion: Linea: 1, Valor: 21 + 31
-Identificador: c, Informacion: Linea: 2, Valor: e + 2
-Identificador: f, Informacion: Linea: 3, Valor: 50
-Identificador: k, Informacion: Linea: 6, Valor: 40 - c)
+Identificador: a, Informacion: Linea: 1, Valor: 42
+Identificador: c, Informacion: Linea: 3, Valor: (a + b * 2
