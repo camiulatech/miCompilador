@@ -20,7 +20,7 @@ public class FaseSintactica {
 
     public FaseSintactica(List<Token> tokens) {
         this.tokens = tokens;
-        this.indiceActual = 0;
+        this.indiceActual = 0; //Indice en la lista de tokens 
         this.lineaActual = 0; // Se utiliza para saber en que linea esta el error encontrado
         lista.add('N'); // N es igual a NO tiene par el parentesis inicial
         lista_numero.add('N'); // N es igual a NO es una asignacion
@@ -30,7 +30,7 @@ public class FaseSintactica {
         
     }
 
-    public void analizar() throws Exception {
+    public void analizar() throws Exception { //Funcion encargada de realizar los analisis de las lineas de codigo
         try {
             while (indiceActual < tokens.size() && !existe_error) {
                 programa();
@@ -42,21 +42,21 @@ public class FaseSintactica {
             System.out.println(" contiene un error en su gramatica, falta token ;");
 
         } catch (Exception e) {
-            existe_error = true;
+            existe_error = true; //Se detecto un error
             errores_tablaSimbolos.add(lineaActual+1);
             eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
-            System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + e.getMessage());
+            System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + e.getMessage()); //Salta el mensaje de error junto a la linea y el tipo del mismo
         }
 
         if(!existe_error){
-            System.out.println("Se logro completar la fase sintactica correctamente");
+            System.out.println("Se logro completar la fase sintactica correctamente"); //En caso de no encontrar error indica el exito del programa 
         }
     }
 
     // programa -> expresion ; { programa }
     private void programa() throws Exception {
 
-        while (indiceActual < tokens.size()) {
+        while (indiceActual < tokens.size()) { //se recorre toda la linea de tokens mientras no haya punto y coma
             lineaActual++;
             expresion(); // Analiza una expresión
 
@@ -65,7 +65,7 @@ public class FaseSintactica {
                 siguienteToken();
             }
              else {
-                existe_error = true;
+                existe_error = true; //Detecta la falta de punto y coma en una sentencia 
                 errores_tablaSimbolos.add(lineaActual+1);
                 throw new Exception(" contiene un error en su gramatica, falta token ;");
             }
@@ -125,15 +125,34 @@ public class FaseSintactica {
 
     // termino -> factor { ( * | / ) factor }
     private void termino() throws Exception {
-
         factor(); // Analiza el primer factor
+    
         while (indiceActual < tokens.size() && 
                (tokens.get(indiceActual).getTipo().equals("MULTIPLICACION") || 
                 tokens.get(indiceActual).getTipo().equals("DIVISION"))) {
             siguienteToken(); // Consume el operador
-            factor(); // Consume el siguiente factor
+    
+            // Verificación: ¿Hay más tokens después del operador?
+            if (indiceActual >= tokens.size()) {
+                existe_error = true;
+                errores_tablaSimbolos.add(lineaActual + 1);
+                throw new Exception(" contiene un operador sin un término después de él.");
+            }
+    
+            // Verificación: después de un operador debe haber un término válido
+            if (!tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR") && 
+                !tokens.get(indiceActual).getTipo().equals("NUMERO") && 
+                !tokens.get(indiceActual).getTipo().equals("PARENTESIS_IZQ")) {
+                existe_error = true;
+                errores_tablaSimbolos.add(lineaActual + 1);
+                throw new Exception(" contiene un operador sin un término válido después de él.");
+            }
+    
+            factor(); // Consume el siguiente término
         }
     }
+    
+
 
     // factor -> identificador | numero | ( expresion )
     private void factor() throws Exception {
@@ -186,9 +205,9 @@ public class FaseSintactica {
         }
     }
 
-    private void siguienteToken() {
+    private void siguienteToken() { //Recorre la lista de tokens de una sentencia 
         if (indiceActual < tokens.size()) {
-            indiceActual++;
+            indiceActual++; //va incrementando el indice 
         }
     }
 
@@ -201,6 +220,7 @@ public void eliminarErroresTablaSimbolos(String archivoTablaSimbolos) throws IOE
             String linea;
             int numeroLinea = 1;
 
+            // Agrega solo las líneas que no están en la lista de errores
             while ((linea = br.readLine()) != null) {
                 if (!errores_tablaSimbolos.contains(numeroLinea)) {
                     lineasValidas.add(linea); 
@@ -209,10 +229,11 @@ public void eliminarErroresTablaSimbolos(String archivoTablaSimbolos) throws IOE
             }
         }
 
+        // Reescribe el archivo con las líneas válidas, eliminando las que contienen errores
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTablaSimbolos))) {
             for (String linea : lineasValidas) {
                 bw.write(linea);
-                bw.newLine(); 
+                bw.newLine(); // Añade salto de línea después de cada línea válida
             }
         }
     }
