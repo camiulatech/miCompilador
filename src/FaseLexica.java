@@ -127,6 +127,14 @@ public class FaseLexica {
                 tokens.add(new Token(";", "PUNTO_COMA"));
                 i++;
                 continue;
+            } else if (actual == '{') {
+                tokens.add(new Token("{", "LLAVE_DER"));
+                i++;
+                continue;
+            } else if (actual == '}') {
+                tokens.add(new Token("}", "LLAVE_IZQ"));
+                i++;
+                continue;
             }
 
             System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un lexema no reconocido: " + actual);
