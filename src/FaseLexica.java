@@ -31,23 +31,24 @@ public class FaseLexica {
     private void analizarLinea(String linea) {
         char[] caracteres = linea.toCharArray();
         int i = 0;
-
+        boolean antesDeAsignacion = true; // Variable para verificar si estamos antes del '='
+    
         while (i < caracteres.length) {
             char actual = caracteres[i];
-
+    
             if (Character.isWhitespace(actual)) {
                 i++;
                 continue;
             }
-
+    
             int inicial = i;
-
+    
             if (Character.isLetter(actual)) {
                 StringBuilder identificador = new StringBuilder();
                 boolean contieneNumero = false; 
                 boolean contieneMayuscula = false; 
                 int contieneMasCaracteres = 0; 
-
+    
                 while (i < caracteres.length && (Character.isLetterOrDigit(caracteres[i]))) {
                     if (Character.isUpperCase(caracteres[i])) {
                         contieneMayuscula = true;
@@ -58,9 +59,9 @@ public class FaseLexica {
                     identificador.append(caracteres[i]);
                     i++;
                 }
-
+    
                 contieneMasCaracteres = i - inicial;
-
+    
                 if (contieneMasCaracteres > 12) {
                     System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un identificador no valido, mayor a 12 letras: " + identificador.toString());
                 }
@@ -70,21 +71,22 @@ public class FaseLexica {
                 if (contieneMayuscula) {
                     System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un identificador no valido, contiene una mayuscula: " + identificador.toString());
                 }
-
+    
                 if (contieneMasCaracteres <= 12 && !contieneNumero && !contieneMayuscula) {
                     String id = identificador.toString();
-
-                    if (!tablaSimbolos.existeSimbolo(id)) {
+    
+                    // Agregar a la tabla de símbolos solo si estamos antes del '='
+                    if (antesDeAsignacion && !tablaSimbolos.existeSimbolo(id)) {
                         String valor = obtenerValorDeLaLinea(linea);
                         InformacionSimbolo info = new InformacionSimbolo(lineaActual, valor);
                         tablaSimbolos.agregarSimbolo(id, info);
                     }
-
+    
                     tokens.add(new Token(id, "IDENTIFICADOR"));
                 }
                 continue;
             }
-
+    
             if (Character.isDigit(actual)) {
                 StringBuilder numero = new StringBuilder();
                 while (i < caracteres.length && Character.isDigit(caracteres[i])) {
@@ -94,9 +96,10 @@ public class FaseLexica {
                 tokens.add(new Token(numero.toString(), "NUMERO"));
                 continue;
             }
-
+    
             if (actual == '=') {
                 tokens.add(new Token("=", "ASIGNACION"));
+                antesDeAsignacion = false; // Cambiamos el estado, ahora estamos después del '='
                 i++;
                 continue;
             } else if (actual == '+') {
@@ -136,11 +139,12 @@ public class FaseLexica {
                 i++;
                 continue;
             }
-
+    
             System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un lexema no reconocido: " + actual);
             i++;
         }
     }
+    
 
     public List<Token> getTokens() {
         return tokens;

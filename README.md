@@ -2,7 +2,7 @@
 
 Fabiana Arias Rosales, Ian Calvo Madrigal y Camila Ulate Chaves
 
-## Etapa 2. Creación de un Analizador Sintactico
+## Etapa 3. Creación de un Analizador Semantico
 
 Comandos para ejecutar el programa en la línea de comandos.
 ``` bash 
