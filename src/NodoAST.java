@@ -1,14 +1,12 @@
-import java.util.List;
-
 abstract class NodoAST {
     public abstract void aceptar(VisitanteSemantico visitante);
 }
 
-class NodoPrograma extends NodoAST {
-    List<NodoAST> declaraciones;
+class NodoIdentificador extends NodoAST {
+    String nombre;
 
-    public NodoPrograma(List<NodoAST> declaraciones) {
-        this.declaraciones = declaraciones;
+    public NodoIdentificador(String nombre) {
+        this.nombre = nombre;
     }
 
     @Override
@@ -41,19 +39,6 @@ class NodoOperacionBinaria extends NodoAST {
         this.izquierda = izquierda;
         this.operador = operador;
         this.derecha = derecha;
-    }
-
-    @Override
-    public void aceptar(VisitanteSemantico visitante) {
-        visitante.visitar(this);
-    }
-}
-
-class NodoIdentificador extends NodoAST {
-    String nombre;
-
-    public NodoIdentificador(String nombre) {
-        this.nombre = nombre;
     }
 
     @Override

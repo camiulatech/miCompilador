@@ -28,9 +28,10 @@ public class FaseSintacticaAST {
         this.existe_error = false;
     }
 
+    
     public NodoPrograma analizar() throws Exception {
+        List<NodoAST> declaraciones = new ArrayList<>();
         try {
-            List<NodoAST> declaraciones = new ArrayList<>();
             while (indiceActual < tokens.size() && !existe_error) {
                 declaraciones.add(programa());
             }
@@ -41,26 +42,30 @@ public class FaseSintacticaAST {
         } catch (Exception e) {
             existe_error = true;
             eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
-            System.out.println("Error [Fase Sintactica]: La línea " + (lineaActual) + e.getMessage());
+            System.out.println("Error [Fase Sintactica AST]: La línea " + (lineaActual) + " " + e.getMessage());
             return null;
         }
     }
 
-    private NodoAST programa() throws Exception {
-        lineaActual++;
-        NodoAST nodoExpresion = expresion();
-
-        if (tokens.get(indiceActual).getTipo().equals("PUNTO_COMA")) {
-            lista_numero.add('N');
-            siguienteToken();
-        } else {
-            existe_error = true;
-            errores_tablaSimbolos.add(lineaActual + 1);
-            throw new Exception(" contiene un error en su gramática, falta token ;");
+    public NodoAST programa() throws Exception {
+        List<NodoAST> declaraciones = new ArrayList<>();
+        while (indiceActual < tokens.size()) { // Se recorre toda la línea de tokens
+            lineaActual++;
+            NodoAST nodoExpresion = expresion(); // Analiza una expresión
+            declaraciones.add(nodoExpresion); // Agrega la expresión al árbol
+    
+            // Verifica que el token actual sea un punto y coma
+            if (indiceActual < tokens.size() && tokens.get(indiceActual).getTipo().equals("PUNTO_COMA")) {
+                siguienteToken(); // Mueve al siguiente token
+            } else {
+                existe_error = true; 
+                errores_tablaSimbolos.add(lineaActual);
+                throw new Exception(" contiene un error en su gramática, falta token ;");
+            }
         }
-
-        return nodoExpresion;
+        return new NodoPrograma(declaraciones);
     }
+
 
     private NodoAST expresion() throws Exception {
         NodoAST nodoIzquierdo;
@@ -71,6 +76,8 @@ public class FaseSintacticaAST {
 
             if (tokens.get(indiceActual).getTipo().equals("ASIGNACION")) {
                 siguienteToken();
+                lista_numero.add('S'); 
+
                 NodoAST nodoExpresion = expresion();
                 return new NodoAsignacion(identificadorToken.getValor(), nodoExpresion);
             } else {
@@ -119,6 +126,7 @@ public class FaseSintacticaAST {
 
     private NodoAST factor() throws Exception {
         if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
+            System.out.println("IDENTIFICADOR = " +tokens.get(indiceActual).getTipo());            
             Token identificadorToken = tokens.get(indiceActual);
             siguienteToken();
             return new NodoIdentificador(identificadorToken.getValor());
@@ -134,14 +142,18 @@ public class FaseSintacticaAST {
             }
 
             if (tokens.get(indiceActual).getTipo().equals("PUNTO_COMA") && (lista_numero.get(lista_numero.size() - 1) == 'N')) {
+                System.out.println("EN EL IF DE PUNTO Y COMA"+tokens.get(indiceActual).getTipo());
+                System.out.println("CAE AQUI PRIMERO");
                 validar_numeroSolo = true;
             }
 
+            
             if (validar_numeroSolo) {
                 errores_tablaSimbolos.add(lineaActual + 1);
                 existe_error = true;
+                System.out.println("CAE AQUI");
                 throw new Exception(" contiene un número que está solo.");
-            }
+            } 
 
             return new NodoNumero(Integer.parseInt(numeroToken.getValor()));
 

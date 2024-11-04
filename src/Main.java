@@ -21,8 +21,12 @@ public class Main {
             System.out.println("\n" + "FASE SINTACTICA: ");
         
             //Inicio Fase Sintactica
-            FaseSintactica analizadorSintactico = new FaseSintactica(analizadorLexico.getTokens());
-            analizadorSintactico.analizar();
+            //FaseSintactica analizadorSintactico = new FaseSintactica(analizadorLexico.getTokens());
+            //analizadorSintactico.analizar();
+
+            //Pruebas con la nueva fase sintactica
+            FaseSintacticaAST faseSintacticaAST = new FaseSintacticaAST(analizadorLexico.getTokens());
+            faseSintacticaAST.analizar();
             
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());
