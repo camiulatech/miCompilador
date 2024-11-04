@@ -1,5 +1,11 @@
 abstract class NodoAST {
+
     public abstract void aceptar(VisitanteSemantico visitante);
+
+        // Método para imprimir el árbol
+        public void imprimir(String prefijo) {
+            System.out.println(prefijo + this.toString()); // Imprime el tipo de nodo
+        }
 }
 
 class NodoIdentificador extends NodoAST {
@@ -13,6 +19,16 @@ class NodoIdentificador extends NodoAST {
     public void aceptar(VisitanteSemantico visitante) {
         visitante.visitar(this);
     }
+
+    @Override
+    public String toString() {
+        return "NodoIdentificador: " + nombre; // Muestra el nombre del identificador
+    }
+
+    @Override
+    public void imprimir(String prefijo) {
+        super.imprimir(prefijo); // Llama al método de impresión en NodoAST
+    }
 }
 
 class NodoAsignacion extends NodoAST {
@@ -22,6 +38,17 @@ class NodoAsignacion extends NodoAST {
     public NodoAsignacion(String identificador, NodoAST expresion) {
         this.identificador = identificador;
         this.expresion = expresion;
+    }
+
+    @Override
+    public String toString() {
+        return "NodoAsignacion: " + identificador;
+    }
+
+    @Override
+    public void imprimir(String prefijo) {
+        super.imprimir(prefijo);
+        expresion.imprimir(prefijo + "  "); // Imprime la expresión asignada
     }
 
     @Override
@@ -45,6 +72,18 @@ class NodoOperacionBinaria extends NodoAST {
     public void aceptar(VisitanteSemantico visitante) {
         visitante.visitar(this);
     }
+
+    @Override
+    public String toString() {
+        return "NodoOperacionBinaria: " + operador; // Muestra el operador
+    }
+
+    @Override
+    public void imprimir(String prefijo) {
+        super.imprimir(prefijo); // Llama al método de impresión en NodoAST
+        izquierda.imprimir(prefijo + "  "); // Imprime la subexpresión izquierda
+        derecha.imprimir(prefijo + "  "); // Imprime la subexpresión derecha
+    }
 }
 
 class NodoNumero extends NodoAST {
@@ -55,7 +94,14 @@ class NodoNumero extends NodoAST {
     }
 
     @Override
+    public String toString() {
+        return "NodoNumero: " + valor;
+    }    
+
+    @Override
     public void aceptar(VisitanteSemantico visitante) {
         visitante.visitar(this);
     }
+
+
 }

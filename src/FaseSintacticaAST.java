@@ -126,7 +126,6 @@ public class FaseSintacticaAST {
 
     private NodoAST factor() throws Exception {
         if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
-            System.out.println("IDENTIFICADOR = " +tokens.get(indiceActual).getTipo());            
             Token identificadorToken = tokens.get(indiceActual);
             siguienteToken();
             return new NodoIdentificador(identificadorToken.getValor());
@@ -142,8 +141,6 @@ public class FaseSintacticaAST {
             }
 
             if (tokens.get(indiceActual).getTipo().equals("PUNTO_COMA") && (lista_numero.get(lista_numero.size() - 1) == 'N')) {
-                System.out.println("EN EL IF DE PUNTO Y COMA"+tokens.get(indiceActual).getTipo());
-                System.out.println("CAE AQUI PRIMERO");
                 validar_numeroSolo = true;
             }
 

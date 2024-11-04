@@ -11,4 +11,17 @@ public class NodoPrograma extends NodoAST {
     public void aceptar(VisitanteSemantico visitante) {
         visitante.visitar(this);
     }
+
+    @Override
+    public void imprimir(String prefijo) {
+        super.imprimir(prefijo);
+        for (NodoAST declaracion : declaraciones) {
+            declaracion.imprimir(prefijo + "  "); // Añade un espacio al prefijo para la jerarquía
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "NodoPrograma";
+    }
 }

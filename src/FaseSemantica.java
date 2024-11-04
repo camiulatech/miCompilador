@@ -50,7 +50,9 @@ public class FaseSemantica implements VisitanteSemantico {
 
     @Override
     public void visitar(NodoPrograma nodo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitar'");
-    }
+        // Recorre cada declaración o expresión en el nodo del programa y aplica la validación semántica
+        for (NodoAST declaracion : nodo.declaraciones) {
+            declaracion.aceptar(this); // Llama al método aceptar en cada declaración o expresión
+        }
+    }    
 }

@@ -33,11 +33,16 @@ public class Main {
 
             ast.aceptar(faseSemantica);
 
+            System.out.println("\nImpresion Arbol AST:");
+            ast.imprimir("");
+
             
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());
+        } catch (RuntimeException e) {
+            System.out.println("Error en la fase semantica: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error en la fase sintáctica: " + e.getMessage());
+            System.out.println("Error en la fase sintactica: " + e.getMessage());
         }
     }
 }
