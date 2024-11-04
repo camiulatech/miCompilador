@@ -1,0 +1,7 @@
+// Notas Fase Semantica
+
+1. Los parentesis tiene que tener un nodo? o eso no es necesario y nada que ver
+
+// Pendientes 
+
+1. La tabla de simbolos esta agregando cosas que nada que ver 
