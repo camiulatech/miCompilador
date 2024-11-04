@@ -36,4 +36,9 @@ public class TablaSimbolos {
         }
         writer.close();
     }
+
+        // Método para obtener la tabla de símbolos completa
+        public Map<String, InformacionSimbolo> getTabla() {
+            return tabla;
+        }
 }

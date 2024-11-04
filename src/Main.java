@@ -26,7 +26,13 @@ public class Main {
 
             //Pruebas con la nueva fase sintactica
             FaseSintacticaAST faseSintacticaAST = new FaseSintacticaAST(analizadorLexico.getTokens());
-            faseSintacticaAST.analizar();
+            NodoAST ast = faseSintacticaAST.analizar();
+
+            System.out.println("\n" + "FASE SEMANTICA: ");
+            FaseSemantica faseSemantica = new FaseSemantica(analizadorLexico.getTablaSimbolos().getTabla());
+
+            ast.aceptar(faseSemantica);
+
             
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());

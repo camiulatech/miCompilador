@@ -1,3 +1,15 @@
 Tabla de Simbolos:
-Identificador: b, Informacion: Linea: 2, Valor: a - 7
-Identificador: c, Informacion: Linea: 3, Valor: (a + b * 2
+Identificador: y, Informacion: Linea: 1, Valor: 10 + 20
+Identificador: d, Informacion: Linea: 2, Valor: 7
+Identificador: i, Informacion: Linea: 3, Valor: y * 20
+Identificador: f, Informacion: Linea: 4, Valor: (3 + 50) / y
+Identificador: c, Informacion: Linea: 5, Valor: f + 2
+Identificador: k, Informacion: Linea: 6, Valor: 2
+Identificador: r, Informacion: Linea: 7, Valor: 15 * (8 / 4)
+Identificador: j, Informacion: Linea: 8, Valor: c + 20
+Identificador: n, Informacion: Linea: 9, Valor: (k * j) + 1
+Identificador: a, Informacion: Linea: 10, Valor: 2 + (60 - 8)
+Identificador: t, Informacion: Linea: 11, Valor: 100 / k
+Identificador: u, Informacion: Linea: 12, Valor: a + t
+Identificador: s, Informacion: Linea: 13, Valor: (21 * 3) - 5
+Identificador: w, Informacion: Linea: 14, Valor: 25
