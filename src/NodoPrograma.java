@@ -1,6 +1,7 @@
 import java.util.List;
 
 // Nodo inicial tipo programa
+
 public class NodoPrograma extends NodoAST {
     List<NodoAST> declaraciones;
 
@@ -14,10 +15,10 @@ public class NodoPrograma extends NodoAST {
     }
 
     @Override
-    public void imprimir(String prefijo) {
-        super.imprimir(prefijo);
-        for (NodoAST declaracion : declaraciones) {
-            declaracion.imprimir(prefijo + "  "); 
+    public void imprimir(String prefijo, boolean esUltimo) {
+        super.imprimir(prefijo, esUltimo);
+        for (int i = 0; i < declaraciones.size(); i++) {
+            declaraciones.get(i).imprimir(prefijo + (esUltimo ? "    " : "|   "), i == declaraciones.size() - 1);
         }
     }
 

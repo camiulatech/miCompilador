@@ -29,7 +29,7 @@ public class Main {
             ast.aceptar(faseSemantica);
 
             System.out.println("\nImpresion Arbol AST:");
-            ast.imprimir("");
+            ast.imprimir("", false);
             
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());

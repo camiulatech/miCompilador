@@ -1,18 +1,17 @@
 abstract class NodoAST {
 
     // Clase abstracta de la cual van a heredar todos los tipos de nodos
-
     public abstract void aceptar(VisitanteSemantico visitante);
 
-        public void imprimir(String prefijo) {
-            System.out.println(prefijo + this.toString()); 
-        }
+    public void imprimir(String prefijo, boolean esUltimo) {
+        System.out.println(prefijo + (esUltimo ? "|___ " : "|--- ") + this.toString());
+    }
 }
 
 // Nodo tipo identificador
 class NodoIdentificador extends NodoAST {
     public String nombre;
-    public int linea;  
+    public int linea;
 
     public NodoIdentificador(String nombre, int linea) {
         this.nombre = nombre;
@@ -26,12 +25,12 @@ class NodoIdentificador extends NodoAST {
 
     @Override
     public String toString() {
-        return "NodoIdentificador: " + nombre; 
+        return "NodoIdentificador: " + nombre;
     }
 
     @Override
-    public void imprimir(String prefijo) {
-        super.imprimir(prefijo); 
+    public void imprimir(String prefijo, boolean esUltimo) {
+        super.imprimir(prefijo, esUltimo);
     }
 }
 
@@ -39,7 +38,7 @@ class NodoIdentificador extends NodoAST {
 class NodoAsignacion extends NodoAST {
     public String identificador;
     public NodoAST expresion;
-    public int linea;  
+    public int linea;
 
     public NodoAsignacion(String identificador, NodoAST expresion, int linea) {
         this.identificador = identificador;
@@ -53,9 +52,9 @@ class NodoAsignacion extends NodoAST {
     }
 
     @Override
-    public void imprimir(String prefijo) {
-        super.imprimir(prefijo);
-        expresion.imprimir(prefijo + "  "); 
+    public void imprimir(String prefijo, boolean esUltimo) {
+        super.imprimir(prefijo, esUltimo);
+        expresion.imprimir(prefijo + (esUltimo ? "    " : "|   "), true);
     }
 
     @Override
@@ -85,18 +84,18 @@ class NodoOperacionBinaria extends NodoAST {
 
     @Override
     public String toString() {
-        return "NodoOperacionBinaria: " + operador; 
+        return "NodoOperacionBinaria: " + operador;
     }
 
     @Override
-    public void imprimir(String prefijo) {
-        super.imprimir(prefijo); 
-        izquierda.imprimir(prefijo + "  "); 
-        derecha.imprimir(prefijo + "  "); 
+    public void imprimir(String prefijo, boolean esUltimo) {
+        super.imprimir(prefijo, esUltimo);
+        izquierda.imprimir(prefijo + (esUltimo ? "    " : "|   "), false);
+        derecha.imprimir(prefijo + (esUltimo ? "    " : "|   "), true);
     }
 }
 
-// Nodo de tipo Numero 
+// Nodo de tipo Numero
 class NodoNumero extends NodoAST {
     int valor;
 
@@ -107,12 +106,15 @@ class NodoNumero extends NodoAST {
     @Override
     public String toString() {
         return "NodoNumero: " + valor;
-    }    
+    }
 
     @Override
     public void aceptar(VisitanteSemantico visitante) {
         visitante.visitar(this);
     }
 
-
+    @Override
+    public void imprimir(String prefijo, boolean esUltimo) {
+        super.imprimir(prefijo, esUltimo);
+    }
 }

@@ -9,7 +9,7 @@ public class FaseSemantica implements VisitanteSemantico {
 
     @Override
     public void visitar(NodoAsignacion nodo) {
-        // Verifica que el identificador al que se le asigna esté en la tabla de simbolos
+        // Verifica que el identificador al que se le asigna este en la tabla de simbolos
         if (!tablaSimbolos.containsKey(nodo.identificador)) {
             throw new RuntimeException("La linea " + nodo.linea + " contiene un error, no declarado identificador '" + nodo.identificador + "'");        }
         
