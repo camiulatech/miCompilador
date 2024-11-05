@@ -1,2 +1,3 @@
 Tabla de Simbolos:
-Identificador: cami, Informacion: Linea: 1, Valor: x + 1
+Identificador: a, Informacion: Linea: 1, Valor: 42
+Identificador: d, Informacion: Linea: 2, Valor: cami-7

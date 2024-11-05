@@ -1,5 +1,4 @@
 interface VisitanteSemantico {
-
     void visitar(NodoPrograma nodo);
     void visitar(NodoAsignacion nodo);
     void visitar(NodoOperacionBinaria nodo);

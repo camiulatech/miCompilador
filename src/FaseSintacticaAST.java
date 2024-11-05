@@ -42,7 +42,6 @@ public class FaseSintacticaAST {
         } catch (Exception e) {
             existe_error = true;
             eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
-            System.out.println("Error [Fase Sintactica AST]: La línea " + (lineaActual) + " " + e.getMessage());
             return null;
         }
     }
@@ -56,6 +55,7 @@ public class FaseSintacticaAST {
     
             // Verifica que el token actual sea un punto y coma
             if (indiceActual < tokens.size() && tokens.get(indiceActual).getTipo().equals("PUNTO_COMA")) {
+                lista_numero.add('N');
                 siguienteToken(); // Mueve al siguiente token
             } else {
                 existe_error = true; 
@@ -82,24 +82,18 @@ public class FaseSintacticaAST {
                 return new NodoAsignacion(identificadorToken.getValor(), nodoExpresion);
             } else {
                 indiceActual--;
-                nodoIzquierdo = termino();
-                while (indiceActual < tokens.size() && (tokens.get(indiceActual).getTipo().equals("SUMA") || tokens.get(indiceActual).getTipo().equals("RESTA"))) {
-                    String operador = tokens.get(indiceActual).getValor();
-                    siguienteToken();
-                    NodoAST nodoDerecho = termino();
-                    nodoIzquierdo = new NodoOperacionBinaria(nodoIzquierdo, operador, nodoDerecho);
-                }
-            }
-        } else {
-            nodoIzquierdo = termino();
-            while (indiceActual < tokens.size() && (tokens.get(indiceActual).getTipo().equals("SUMA") || tokens.get(indiceActual).getTipo().equals("RESTA"))) {
-                String operador = tokens.get(indiceActual).getValor();
-                siguienteToken();
-                NodoAST nodoDerecho = termino();
-                nodoIzquierdo = new NodoOperacionBinaria(nodoIzquierdo, operador, nodoDerecho);
             }
         }
-
+        
+        nodoIzquierdo = termino();
+        while (indiceActual < tokens.size() && 
+               (tokens.get(indiceActual).getTipo().equals("SUMA") || tokens.get(indiceActual).getTipo().equals("RESTA"))) {
+            String operador = tokens.get(indiceActual).getValor();
+            siguienteToken();
+            NodoAST nodoDerecho = termino();
+            nodoIzquierdo = new NodoOperacionBinaria(nodoIzquierdo, operador, nodoDerecho);
+        }
+        
         if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_DER") && (lista.get(lista.size() - 1) == 'N')) {
             validar_parentesis = true;
         }
@@ -113,22 +107,54 @@ public class FaseSintacticaAST {
         return nodoIzquierdo;
     }
 
+    // Metodo con AST: termino -> factor { ( * | / ) factor }
     private NodoAST termino() throws Exception {
+        // Construye el nodo izquierdo al llamar al método factor()
         NodoAST nodoIzquierdo = factor();
-        while (indiceActual < tokens.size() && (tokens.get(indiceActual).getTipo().equals("MULTIPLICACION") || tokens.get(indiceActual).getTipo().equals("DIVISION"))) {
+        
+        // Mientras haya tokens que representen operadores de multiplicación o división
+        while (indiceActual < tokens.size() && 
+            (tokens.get(indiceActual).getTipo().equals("MULTIPLICACION") || 
+                tokens.get(indiceActual).getTipo().equals("DIVISION"))) {
+            
+            // Guarda el operador y avanza al siguiente token
             String operador = tokens.get(indiceActual).getValor();
             siguienteToken();
+            
+            // Validación: Verifica que hay otro token después del operador
+            if (indiceActual >= tokens.size()) {
+                existe_error = true;
+                errores_tablaSimbolos.add(lineaActual + 1);
+                throw new Exception("Error [Fase Sintáctica]: La línea " + (lineaActual + 1) + " contiene un operador sin un término después de él.");
+            }
+
+            // Validación: Comprueba que el siguiente token después del operador sea un término válido
+            String tipoSiguienteToken = tokens.get(indiceActual).getTipo();
+            if (!tipoSiguienteToken.equals("IDENTIFICADOR") && 
+                !tipoSiguienteToken.equals("NUMERO") && 
+                !tipoSiguienteToken.equals("PARENTESIS_IZQ")) {
+                existe_error = true;
+                errores_tablaSimbolos.add(lineaActual + 1);
+                throw new Exception("Error [Fase Sintáctica]: La línea " + (lineaActual + 1) + " contiene un operador sin un término válido después de él.");
+            }
+
+            // Construye el nodo derecho llamando nuevamente a factor()
             NodoAST nodoDerecho = factor();
+            
+            // Crea un nodo binario para la operación y lo asigna como el nuevo nodo izquierdo
             nodoIzquierdo = new NodoOperacionBinaria(nodoIzquierdo, operador, nodoDerecho);
         }
+        
+        // Retorna el nodo izquierdo, que representa la raíz del subárbol de este término
         return nodoIzquierdo;
     }
+
 
     private NodoAST factor() throws Exception {
         if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
             Token identificadorToken = tokens.get(indiceActual);
             siguienteToken();
-            return new NodoIdentificador(identificadorToken.getValor());
+            return new NodoIdentificador(identificadorToken.getValor(), lineaActual);
 
         } else if (tokens.get(indiceActual).getTipo().equals("NUMERO")) {
             Token numeroToken = tokens.get(indiceActual);
@@ -148,7 +174,6 @@ public class FaseSintacticaAST {
             if (validar_numeroSolo) {
                 errores_tablaSimbolos.add(lineaActual + 1);
                 existe_error = true;
-                System.out.println("CAE AQUI");
                 throw new Exception(" contiene un número que está solo.");
             } 
 

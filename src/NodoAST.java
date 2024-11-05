@@ -9,10 +9,12 @@ abstract class NodoAST {
 }
 
 class NodoIdentificador extends NodoAST {
-    String nombre;
+    public String nombre;
+    public int linea;  // Campo para la línea del nodo
 
-    public NodoIdentificador(String nombre) {
+    public NodoIdentificador(String nombre, int linea) {
         this.nombre = nombre;
+        this.linea = linea;
     }
 
     @Override

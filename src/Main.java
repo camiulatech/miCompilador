@@ -20,9 +20,11 @@ public class Main {
             
             System.out.println("\n" + "FASE SINTACTICA: ");
         
-            //Inicio Fase Sintactica
+            // Fase Sintactica del avance 2 sin la implementacion de los nodos AST
             //FaseSintactica analizadorSintactico = new FaseSintactica(analizadorLexico.getTokens());
             //analizadorSintactico.analizar();
+
+            System.out.println("\n" + "FASE SINTACTICA AST:");
 
             //Pruebas con la nueva fase sintactica
             FaseSintacticaAST faseSintacticaAST = new FaseSintacticaAST(analizadorLexico.getTokens());

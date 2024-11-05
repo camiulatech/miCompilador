@@ -42,9 +42,9 @@ public class FaseSemantica implements VisitanteSemantico {
 
     @Override
     public void visitar(NodoIdentificador nodo) {
-        // Verifica que el identificador esté en la tabla de símbolos
         if (!tablaSimbolos.containsKey(nodo.nombre)) {
-            throw new RuntimeException("Error: Identificador " + nodo.nombre + " no declarado.");
+            throw new RuntimeException("Error [Fase Semántica]: La línea " + nodo.linea + 
+                                       " contiene un error, no declarado identificador '" + nodo.nombre + "'");
         }
     }
 
@@ -54,5 +54,6 @@ public class FaseSemantica implements VisitanteSemantico {
         for (NodoAST declaracion : nodo.declaraciones) {
             declaracion.aceptar(this); // Llama al método aceptar en cada declaración o expresión
         }
-    }    
+
+    }
 }
