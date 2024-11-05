@@ -28,13 +28,15 @@ public class Main {
             FaseSemantica faseSemantica = new FaseSemantica(analizadorLexico.getTablaSimbolos().getTabla());
             ast.aceptar(faseSemantica);
 
+            faseSemantica.correcto();
+
             System.out.println("\nImpresion Arbol AST:");
             ast.imprimir("", false);
             
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());
         } catch (RuntimeException e) {
-            System.out.println("Error [Fase Semantica]:" + e.getMessage());
+            System.out.println("" + e.getMessage());
         } catch (Exception e) {
             System.out.println("Error en el main: " + e.getMessage());
         }

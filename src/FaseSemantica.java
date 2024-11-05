@@ -2,32 +2,49 @@ import java.util.Map;
 
 public class FaseSemantica implements VisitanteSemantico {
     private Map<String, InformacionSimbolo> tablaSimbolos;
+    private boolean error;
 
     public FaseSemantica(Map<String, InformacionSimbolo> tablaSimbolos) {
         this.tablaSimbolos = tablaSimbolos;
+        this.error = false;
+    }
+
+    public void correcto(){
+        if (!error) {
+            System.out.println("Se completo la Fase Semantica correctamente");
+        }
     }
 
     @Override
     public void visitar(NodoAsignacion nodo) {
-        // Verifica que el identificador al que se le asigna este en la tabla de simbolos
-        if (!tablaSimbolos.containsKey(nodo.identificador)) {
-            throw new RuntimeException("La linea " + nodo.linea + " contiene un error, no declarado identificador '" + nodo.identificador + "'");        }
-        
-        nodo.expresion.aceptar(this);
+        try {
+            // Verifica que el identificador al que se le asigna este en la tabla de simbolos
+            if (!tablaSimbolos.containsKey(nodo.identificador)) {
+                throw new RuntimeException("La linea " + nodo.linea + " contiene un error: identificador no declarado '" + nodo.identificador + "'");
+            }
+            nodo.expresion.aceptar(this);
+        } catch (RuntimeException e) {
+            error = true;
+            System.out.println("Error [Fase Semantica]: " + e.getMessage());
+        }
     }
-
     @Override
     public void visitar(NodoOperacionBinaria nodo) {
-        // Recorre los nodos izquierdo y derecho de la operacion binaria
-        nodo.izquierda.aceptar(this);
-        nodo.derecha.aceptar(this);
-                if (nodo.operador.equals("/")) {
-            if (nodo.derecha instanceof NodoNumero) {
-                NodoNumero derechoNumero = (NodoNumero) nodo.derecha;
-                if (derechoNumero.valor == 0) {
-                    throw new RuntimeException("La linea " + nodo.linea + " contiene una division entre cero en la expresion.");
+        try {
+            // Recorre los nodos izquierdo y derecho de la operación binaria
+            nodo.izquierda.aceptar(this);
+            nodo.derecha.aceptar(this);
+            if (nodo.operador.equals("/")) {
+                if (nodo.derecha instanceof NodoNumero) {
+                    NodoNumero derechoNumero = (NodoNumero) nodo.derecha;
+                    if (derechoNumero.valor == 0) {
+                        throw new RuntimeException("La linea " + nodo.linea + " contiene una division entre cero.");
+                    }
                 }
             }
+        } catch (RuntimeException e) {
+            error = true;
+            System.out.println("Error [Fase Semantica]: " + e.getMessage());
         }
     }
 
@@ -38,18 +55,26 @@ public class FaseSemantica implements VisitanteSemantico {
 
     @Override
     public void visitar(NodoIdentificador nodo) {
-        if (!tablaSimbolos.containsKey(nodo.nombre)) {
-            throw new RuntimeException(" La linea " + nodo.linea + 
-                                       " contiene un error, no declarado identificador '" + nodo.nombre + "'");
+        try {
+            if (!tablaSimbolos.containsKey(nodo.nombre)) {
+                throw new RuntimeException("La linea " + nodo.linea + " contiene un error: identificador no declarado '" + nodo.nombre + "'");
+            }
+        } catch (RuntimeException e) {
+            error = true;
+            System.out.println("Error [Fase Semantica]: " + e.getMessage());
         }
     }
 
     @Override
     public void visitar(NodoPrograma nodo) {
-        // Recorre cada declaracion
-        for (NodoAST declaracion : nodo.declaraciones) {
-            declaracion.aceptar(this); 
+        try {
+            // Recorre cada declaración
+            for (NodoAST declaracion : nodo.declaraciones) {
+                declaracion.aceptar(this);
+            }
+        } catch (RuntimeException e) {
+            error = true;
+            System.out.println("Error [Fase Semantica]: " + e.getMessage());
         }
-
     }
 }
