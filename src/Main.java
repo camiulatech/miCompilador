@@ -18,7 +18,7 @@ public class Main {
             analizadorLexico.getTablaSimbolos().guardarTablaSimbolos(archivoSalida);
             System.out.println("\n" + "Tabla de simbolos guardada en: " + archivoSalida);
             
-            System.out.println("\n" + "FASE SINTACTICA: ");
+            //System.out.println("\n" + "FASE SINTACTICA: ");
         
             // Fase Sintactica del avance 2 sin la implementacion de los nodos AST
             //FaseSintactica analizadorSintactico = new FaseSintactica(analizadorLexico.getTokens());
@@ -42,9 +42,9 @@ public class Main {
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());
         } catch (RuntimeException e) {
-            System.out.println("Error en la fase semantica: " + e.getMessage());
+            System.out.println("Error [Fase Semantica]:" + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error en la fase sintactica: " + e.getMessage());
+            System.out.println("Error en el main: " + e.getMessage());
         }
     }
 }

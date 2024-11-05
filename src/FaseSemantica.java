@@ -43,7 +43,7 @@ public class FaseSemantica implements VisitanteSemantico {
     @Override
     public void visitar(NodoIdentificador nodo) {
         if (!tablaSimbolos.containsKey(nodo.nombre)) {
-            throw new RuntimeException("Error [Fase Semántica]: La línea " + nodo.linea + 
+            throw new RuntimeException(" La línea " + nodo.linea + 
                                        " contiene un error, no declarado identificador '" + nodo.nombre + "'");
         }
     }

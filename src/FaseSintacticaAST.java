@@ -39,9 +39,18 @@ public class FaseSintacticaAST {
                 System.out.println("Se completó la fase sintáctica correctamente");
             }
             return new NodoPrograma(declaraciones);
+        } catch (IndexOutOfBoundsException e) { 
+                // cuando detecta un indice fuera de sus limites significa que falta ;
+            eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
+            existe_error = true;
+            errores_tablaSimbolos.add(lineaActual+1);
+            System.out.println(" contiene un error en su gramatica, falta token ;");
+            return null;
+
         } catch (Exception e) {
             existe_error = true;
             eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
+            System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + e.getMessage()); 
             return null;
         }
     }

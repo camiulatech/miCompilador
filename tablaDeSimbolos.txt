@@ -1,3 +1,4 @@
 Tabla de Simbolos:
-Identificador: a, Informacion: Linea: 1, Valor: 42
-Identificador: d, Informacion: Linea: 2, Valor: cami-7
+Identificador: a, Informacion: Linea: 1, Valor: 21
+Identificador: f, Informacion: Linea: 3, Valor: 50
+Identificador: j, Informacion: Linea: 4, Valor: f + 
