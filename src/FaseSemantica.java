@@ -9,9 +9,13 @@ public class FaseSemantica implements VisitanteSemantico {
         this.error = false;
     }
 
-    public void correcto(){
+    public boolean correcto(){
         if (!error) {
             System.out.println("Se completo la Fase Semantica correctamente");
+            return true;
+        }
+        else {
+            return false;
         }
     }
 

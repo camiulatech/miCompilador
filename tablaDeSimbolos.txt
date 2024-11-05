@@ -1,8 +1,6 @@
 Tabla de Simbolos:
-Identificador: g, Informacion: Linea: 1, Valor: 100 + 75
-Identificador: c, Informacion: Linea: 2, Valor: 300 / g
-Identificador: i, Informacion: Linea: 3, Valor: 21
-Identificador: y, Informacion: Linea: 4, Valor: (i * 5) - 10
-Identificador: j, Informacion: Linea: 5, Valor: (g - 50) * 2
-Identificador: k, Informacion: Linea: 6, Valor: 35
-Identificador: t, Informacion: Linea: 7, Valor: (50 - k)
+Identificador: c, Informacion: Linea: 1, Valor: 50
+Identificador: x, Informacion: Linea: 2, Valor: c + 35
+Identificador: y, Informacion: Linea: 3, Valor: x / 0
+Identificador: j, Informacion: Linea: 4, Valor: (k - 10) * 2
+Identificador: s, Informacion: Linea: 5, Valor: 20 * i
