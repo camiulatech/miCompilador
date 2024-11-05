@@ -1,2 +1,2 @@
 a = 42;
-d = cami-7;
+s = cami;

@@ -34,12 +34,14 @@ class NodoIdentificador extends NodoAST {
 }
 
 class NodoAsignacion extends NodoAST {
-    String identificador;
-    NodoAST expresion;
+    public String identificador;
+    public NodoAST expresion;
+    public int linea;  // Campo para almacenar la línea del nodo
 
-    public NodoAsignacion(String identificador, NodoAST expresion) {
+    public NodoAsignacion(String identificador, NodoAST expresion, int linea) {
         this.identificador = identificador;
         this.expresion = expresion;
+        this.linea = linea;
     }
 
     @Override
@@ -63,11 +65,13 @@ class NodoOperacionBinaria extends NodoAST {
     NodoAST izquierda;
     NodoAST derecha;
     String operador;
+    int linea;
 
-    public NodoOperacionBinaria(NodoAST izquierda, String operador, NodoAST derecha) {
+    public NodoOperacionBinaria(NodoAST izquierda, String operador, NodoAST derecha, int linea) {
         this.izquierda = izquierda;
         this.operador = operador;
         this.derecha = derecha;
+        this.linea = linea;
     }
 
     @Override

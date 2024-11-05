@@ -11,8 +11,8 @@ public class FaseSemantica implements VisitanteSemantico {
     public void visitar(NodoAsignacion nodo) {
         // Verifica que el identificador al que se le asigna esté en la tabla de símbolos
         if (!tablaSimbolos.containsKey(nodo.identificador)) {
-            throw new RuntimeException("Error: Identificador " + nodo.identificador + " no declarado.");
-        }
+            throw new RuntimeException("Error [Fase Semántica]: La línea " + nodo.linea +
+            " contiene un error, no declarado identificador '" + nodo.identificador + "'");        }
         
         // Recorre la expresión para verificar que todos los identificadores dentro estén definidos
         nodo.expresion.aceptar(this);
@@ -29,7 +29,8 @@ public class FaseSemantica implements VisitanteSemantico {
             if (nodo.derecha instanceof NodoNumero) {
                 NodoNumero derechoNumero = (NodoNumero) nodo.derecha;
                 if (derechoNumero.valor == 0) {
-                    throw new RuntimeException("Error: División por cero en expresión.");
+                    throw new RuntimeException("Error [Fase Semántica]: La línea " + nodo.linea +
+                                               " contiene una división entre cero en la expresión.");
                 }
             }
         }

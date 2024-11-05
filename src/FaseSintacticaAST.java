@@ -68,7 +68,7 @@ public class FaseSintacticaAST {
                 siguienteToken(); // Mueve al siguiente token
             } else {
                 existe_error = true; 
-                errores_tablaSimbolos.add(lineaActual);
+                errores_tablaSimbolos.add(lineaActual+1);
                 throw new Exception(" contiene un error en su gramática, falta token ;");
             }
         }
@@ -88,7 +88,7 @@ public class FaseSintacticaAST {
                 lista_numero.add('S'); 
 
                 NodoAST nodoExpresion = expresion();
-                return new NodoAsignacion(identificadorToken.getValor(), nodoExpresion);
+                return new NodoAsignacion(identificadorToken.getValor(), nodoExpresion, lineaActual);
             } else {
                 indiceActual--;
             }
@@ -100,7 +100,7 @@ public class FaseSintacticaAST {
             String operador = tokens.get(indiceActual).getValor();
             siguienteToken();
             NodoAST nodoDerecho = termino();
-            nodoIzquierdo = new NodoOperacionBinaria(nodoIzquierdo, operador, nodoDerecho);
+            nodoIzquierdo = new NodoOperacionBinaria(nodoIzquierdo, operador, nodoDerecho, lineaActual);
         }
         
         if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_DER") && (lista.get(lista.size() - 1) == 'N')) {
@@ -151,7 +151,7 @@ public class FaseSintacticaAST {
             NodoAST nodoDerecho = factor();
             
             // Crea un nodo binario para la operación y lo asigna como el nuevo nodo izquierdo
-            nodoIzquierdo = new NodoOperacionBinaria(nodoIzquierdo, operador, nodoDerecho);
+            nodoIzquierdo = new NodoOperacionBinaria(nodoIzquierdo, operador, nodoDerecho, lineaActual);
         }
         
         // Retorna el nodo izquierdo, que representa la raíz del subárbol de este término
