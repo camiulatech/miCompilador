@@ -1,2 +1,4 @@
 Tabla de Simbolos:
-Identificador: a, Informacion: Linea: 1, Valor: 2 + 2
+Identificador: a, Informacion: Linea: 1, Valor: 3
+Identificador: b, Informacion: Linea: 2, Valor: 4 - 3
+Identificador: c, Informacion: Linea: 3, Valor: a /0

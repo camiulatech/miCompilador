@@ -28,7 +28,6 @@ public class FaseSintacticaAST {
         this.existe_error = false;
     }
 
-    
     public NodoPrograma analizar() throws Exception {
         List<NodoAST> declaraciones = new ArrayList<>();
         try {
@@ -36,21 +35,19 @@ public class FaseSintacticaAST {
                 declaraciones.add(programa());
             }
             if (!existe_error) {
-                System.out.println("Se completó la fase sintáctica correctamente");
+                System.out.println("Se completo la fase sintactica correctamente");
             }
             return new NodoPrograma(declaraciones);
         } catch (IndexOutOfBoundsException e) { 
             eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
             existe_error = true;
             errores_tablaSimbolos.add(lineaActual+1);
-            System.out.println(" contiene un error en su gramatica, falta token ;");
-            return null;
+            throw new RuntimeException(" contiene un error en su gramatica, falta token ;");
 
         } catch (Exception e) {
             existe_error = true;
             eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
-            System.out.println("Error [Fase Sintactica]: La linea " + (lineaActual) + e.getMessage()); 
-            return null;
+            throw new RuntimeException("Error [Fase Sintactica]: La linea " + (lineaActual) + e.getMessage()); 
         }
     }
 
@@ -67,7 +64,7 @@ public class FaseSintacticaAST {
             } else {
                 existe_error = true; 
                 errores_tablaSimbolos.add(lineaActual+1);
-                throw new Exception(" contiene un error en su gramatica, falta token ;");
+                throw new RuntimeException(" contiene un error en su gramatica, falta token ;");
             }
         }
         return new NodoPrograma(declaraciones);
@@ -108,7 +105,7 @@ public class FaseSintacticaAST {
         if (validar_parentesis) {
             errores_tablaSimbolos.add(lineaActual + 1);
             existe_error = true;
-            throw new Exception(" falta token '(' (paréntesis izquierdo)");
+            throw new RuntimeException(" falta token '(' (parentesis izquierdo)");
         }
 
         return nodoIzquierdo;
@@ -128,7 +125,7 @@ public class FaseSintacticaAST {
             if (indiceActual >= tokens.size()) {
                 existe_error = true;
                 errores_tablaSimbolos.add(lineaActual + 1);
-                throw new Exception("Error [Fase Sintáctica]: La línea " + (lineaActual + 1) + " contiene un operador sin un término después de él.");
+                throw new RuntimeException("Error [Fase Sintactica]: La linea " + (lineaActual + 1) + " contiene un operador sin un termino despues de el.");
             }
 
             String tipoSiguienteToken = tokens.get(indiceActual).getTipo();
@@ -137,7 +134,7 @@ public class FaseSintacticaAST {
                 !tipoSiguienteToken.equals("PARENTESIS_IZQ")) {
                 existe_error = true;
                 errores_tablaSimbolos.add(lineaActual + 1);
-                throw new Exception("Error [Fase Sintáctica]: La línea " + (lineaActual + 1) + " contiene un operador sin un término válido después de él.");
+                throw new RuntimeException("Error [Fase Sintactica]: La linea " + (lineaActual + 1) + " contiene un operador sin un termino valido despues de el.");
             }
 
             // Construye el nodo derecho llamando nuevamente a factor()
@@ -165,7 +162,7 @@ public class FaseSintacticaAST {
             if (indiceActual < tokens.size() && tokens.get(indiceActual).getTipo().equals("NUMERO")) {
                 existe_error = true;
                 errores_tablaSimbolos.add(lineaActual + 1);
-                throw new Exception(" contiene numeros consecutivos sin operador.");
+                throw new RuntimeException(" contiene numeros consecutivos sin operador.");
             }
 
             if (tokens.get(indiceActual).getTipo().equals("PUNTO_COMA") && (lista_numero.get(lista_numero.size() - 1) == 'N')) {
@@ -175,7 +172,7 @@ public class FaseSintacticaAST {
             if (validar_numeroSolo) {
                 errores_tablaSimbolos.add(lineaActual + 1);
                 existe_error = true;
-                throw new Exception(" contiene un numero que esta solo.");
+                throw new RuntimeException(" contiene un numero que esta solo.");
             } 
 
             return new NodoNumero(Integer.parseInt(numeroToken.getValor())); // Devuelve un nodo numero
@@ -192,14 +189,14 @@ public class FaseSintacticaAST {
             } else {
                 errores_tablaSimbolos.add(lineaActual + 1);
                 existe_error = true;
-                throw new Exception(" se esperaba un parentesis derecho.");
+                throw new RuntimeException(" se esperaba un parentesis derecho.");
             }
             lista.add('N');
             return nodoExpresion; // devuelve el nodo expresion
         } else {
             errores_tablaSimbolos.add(lineaActual + 1);
             existe_error = true;
-            throw new Exception(" se esperaba un identificador, numero o un parentesis.");
+            throw new RuntimeException(" se esperaba un identificador, numero o un parentesis.");
         }
     }
 

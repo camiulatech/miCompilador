@@ -68,15 +68,15 @@ public class FaseLexica {
     
                 if (contieneMasCaracteres > 12) {
                     error = true;
-                    System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un identificador no valido, mayor a 12 letras: " + identificador.toString());
+                    throw new RuntimeException("Error [Fase Lexica]: La linea " + lineaActual + " contiene un identificador no valido, mayor a 12 letras: " + identificador.toString());
                 }
                 if (contieneNumero) {
                     error = true;
-                    System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un identificador no valido, contiene un digito: " + identificador.toString());
+                    throw new RuntimeException("Error [Fase Lexica]: La linea " + lineaActual + " contiene un identificador no valido, contiene un digito: " + identificador.toString());
                 }
                 if (contieneMayuscula) {
                     error = true;
-                    System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un identificador no valido, contiene una mayuscula: " + identificador.toString());
+                    throw new RuntimeException("Error [Fase Lexica]: La linea " + lineaActual + " contiene un identificador no valido, contiene una mayuscula: " + identificador.toString());
                 }
     
                 if (contieneMasCaracteres <= 12 && !contieneNumero && !contieneMayuscula) {
@@ -148,8 +148,8 @@ public class FaseLexica {
             }
 
             error = true;
-            System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un lexema no reconocido: " + actual);
             i++;
+            throw new RuntimeException("Error [Fase Lexica]: La linea " + lineaActual + " contiene un lexema no reconocido: " + actual);
         }
     }
     

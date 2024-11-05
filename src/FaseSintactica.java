@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-// Esta clase ya no se va a usar, se va a dejar debido a que fue la presentada para el la fase 2 del  proyecto 
+// Esta clase ya no se va a usar, se va a dejar debido a que fue la presentada para el la fase 2 del  proyecto
 public class FaseSintactica {
     private List<Token> tokens;
     private int indiceActual;
