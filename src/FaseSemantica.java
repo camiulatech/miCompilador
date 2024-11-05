@@ -9,18 +9,16 @@ public class FaseSemantica implements VisitanteSemantico {
 
     @Override
     public void visitar(NodoAsignacion nodo) {
-        // Verifica que el identificador al que se le asigna esté en la tabla de símbolos
+        // Verifica que el identificador al que se le asigna esté en la tabla de simbolos
         if (!tablaSimbolos.containsKey(nodo.identificador)) {
-            throw new RuntimeException("Error [Fase Semántica]: La línea " + nodo.linea +
-            " contiene un error, no declarado identificador '" + nodo.identificador + "'");        }
+            throw new RuntimeException("La linea " + nodo.linea + " contiene un error, no declarado identificador '" + nodo.identificador + "'");        }
         
-        // Recorre la expresión para verificar que todos los identificadores dentro estén definidos
         nodo.expresion.aceptar(this);
     }
 
     @Override
     public void visitar(NodoOperacionBinaria nodo) {
-        // Recorre los nodos izquierdo y derecho de la operación binaria
+        // Recorre los nodos izquierdo y derecho de la operacion binaria
         nodo.izquierda.aceptar(this);
         nodo.derecha.aceptar(this);
         
@@ -29,8 +27,7 @@ public class FaseSemantica implements VisitanteSemantico {
             if (nodo.derecha instanceof NodoNumero) {
                 NodoNumero derechoNumero = (NodoNumero) nodo.derecha;
                 if (derechoNumero.valor == 0) {
-                    throw new RuntimeException("Error [Fase Semántica]: La línea " + nodo.linea +
-                                               " contiene una división entre cero en la expresión.");
+                    throw new RuntimeException("La linea " + nodo.linea + " contiene una división entre cero en la expresión.");
                 }
             }
         }

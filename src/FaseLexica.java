@@ -8,6 +8,7 @@ public class FaseLexica {
     private List<Token> tokens = new ArrayList<>();
     private TablaSimbolos tablaSimbolos = new TablaSimbolos();
     private int lineaActual = 1;
+    private boolean error = false;
 
     public void analizarArchivo(String archivo) throws IOException {
         BufferedReader leer = new BufferedReader(new FileReader(archivo));
@@ -16,6 +17,9 @@ public class FaseLexica {
         while ((linea = leer.readLine()) != null) {
             analizarLinea(linea);
             lineaActual++;
+        }
+        if(!error){
+            System.out.println("Se completo la Fase Lexica correctamente");
         }
         leer.close();
     }
@@ -63,12 +67,15 @@ public class FaseLexica {
                 contieneMasCaracteres = i - inicial;
     
                 if (contieneMasCaracteres > 12) {
+                    error = true;
                     System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un identificador no valido, mayor a 12 letras: " + identificador.toString());
                 }
                 if (contieneNumero) {
+                    error = true;
                     System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un identificador no valido, contiene un digito: " + identificador.toString());
                 }
                 if (contieneMayuscula) {
+                    error = true;
                     System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un identificador no valido, contiene una mayuscula: " + identificador.toString());
                 }
     
@@ -139,7 +146,8 @@ public class FaseLexica {
                 i++;
                 continue;
             }
-    
+
+            error = true;
             System.out.println("Error [Fase Lexica]: La linea " + lineaActual + " contiene un lexema no reconocido: " + actual);
             i++;
         }
