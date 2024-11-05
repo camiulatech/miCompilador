@@ -1,16 +1,18 @@
 abstract class NodoAST {
 
+    // Clase abstracta de la cual van a heredar todos los tipos de nodos
+
     public abstract void aceptar(VisitanteSemantico visitante);
 
-        // Método para imprimir el árbol
         public void imprimir(String prefijo) {
-            System.out.println(prefijo + this.toString()); // Imprime el tipo de nodo
+            System.out.println(prefijo + this.toString()); 
         }
 }
 
+// Nodo tipo identificador
 class NodoIdentificador extends NodoAST {
     public String nombre;
-    public int linea;  // Campo para la línea del nodo
+    public int linea;  
 
     public NodoIdentificador(String nombre, int linea) {
         this.nombre = nombre;
@@ -24,19 +26,20 @@ class NodoIdentificador extends NodoAST {
 
     @Override
     public String toString() {
-        return "NodoIdentificador: " + nombre; // Muestra el nombre del identificador
+        return "NodoIdentificador: " + nombre; 
     }
 
     @Override
     public void imprimir(String prefijo) {
-        super.imprimir(prefijo); // Llama al método de impresión en NodoAST
+        super.imprimir(prefijo); 
     }
 }
 
+// Nodo tipo asignacion
 class NodoAsignacion extends NodoAST {
     public String identificador;
     public NodoAST expresion;
-    public int linea;  // Campo para almacenar la línea del nodo
+    public int linea;  
 
     public NodoAsignacion(String identificador, NodoAST expresion, int linea) {
         this.identificador = identificador;
@@ -52,7 +55,7 @@ class NodoAsignacion extends NodoAST {
     @Override
     public void imprimir(String prefijo) {
         super.imprimir(prefijo);
-        expresion.imprimir(prefijo + "  "); // Imprime la expresión asignada
+        expresion.imprimir(prefijo + "  "); 
     }
 
     @Override
@@ -61,6 +64,7 @@ class NodoAsignacion extends NodoAST {
     }
 }
 
+// Nodo tipo Operacion Binaria -> +, -, / y *
 class NodoOperacionBinaria extends NodoAST {
     NodoAST izquierda;
     NodoAST derecha;
@@ -81,17 +85,18 @@ class NodoOperacionBinaria extends NodoAST {
 
     @Override
     public String toString() {
-        return "NodoOperacionBinaria: " + operador; // Muestra el operador
+        return "NodoOperacionBinaria: " + operador; 
     }
 
     @Override
     public void imprimir(String prefijo) {
-        super.imprimir(prefijo); // Llama al método de impresión en NodoAST
-        izquierda.imprimir(prefijo + "  "); // Imprime la subexpresión izquierda
-        derecha.imprimir(prefijo + "  "); // Imprime la subexpresión derecha
+        super.imprimir(prefijo); 
+        izquierda.imprimir(prefijo + "  "); 
+        derecha.imprimir(prefijo + "  "); 
     }
 }
 
+// Nodo de tipo Numero 
 class NodoNumero extends NodoAST {
     int valor;
 

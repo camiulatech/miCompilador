@@ -5,11 +5,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class TablaSimbolos {
-    // Cambiamos HashMap por LinkedHashMap para conservar el orden de inserción
     private Map<String, InformacionSimbolo> tabla;
 
     public TablaSimbolos() {
-        // Inicializamos el LinkedHashMap
         tabla = new LinkedHashMap<>();
     }
     
@@ -25,7 +23,6 @@ public class TablaSimbolos {
         return tabla.containsKey(identificador);
     }
 
-    // Método para guardar la tabla de símbolos en un archivo en el orden en que fueron agregados
     public void guardarTablaSimbolos(String nombreArchivo) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(nombreArchivo));
         writer.write("Tabla de Simbolos:\n");
@@ -37,7 +34,7 @@ public class TablaSimbolos {
         writer.close();
     }
 
-        // Método para obtener la tabla de símbolos completa
+        // Obtener la tabla de simbolos completa
         public Map<String, InformacionSimbolo> getTabla() {
             return tabla;
         }

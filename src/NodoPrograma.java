@@ -1,5 +1,6 @@
 import java.util.List;
 
+// Nodo inicial tipo programa
 public class NodoPrograma extends NodoAST {
     List<NodoAST> declaraciones;
 
@@ -16,7 +17,7 @@ public class NodoPrograma extends NodoAST {
     public void imprimir(String prefijo) {
         super.imprimir(prefijo);
         for (NodoAST declaracion : declaraciones) {
-            declaracion.imprimir(prefijo + "  "); // Añade un espacio al prefijo para la jerarquía
+            declaracion.imprimir(prefijo + "  "); 
         }
     }
 

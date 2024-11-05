@@ -15,7 +15,7 @@ public class FaseSintacticaAST {
     private boolean existe_error;
     private List<Character> lista = new ArrayList<>();
     private List<Character> lista_numero = new ArrayList<>();
-    List<Integer> errores_tablaSimbolos = new ArrayList<>(); // Para saber qué línea eliminar en caso de error
+    List<Integer> errores_tablaSimbolos = new ArrayList<>(); 
 
     public FaseSintacticaAST(List<Token> tokens) {
         this.tokens = tokens;
@@ -40,7 +40,6 @@ public class FaseSintacticaAST {
             }
             return new NodoPrograma(declaraciones);
         } catch (IndexOutOfBoundsException e) { 
-                // cuando detecta un indice fuera de sus limites significa que falta ;
             eliminarErroresTablaSimbolos("tablaDeSimbolos.txt");
             existe_error = true;
             errores_tablaSimbolos.add(lineaActual+1);
@@ -57,19 +56,18 @@ public class FaseSintacticaAST {
 
     public NodoAST programa() throws Exception {
         List<NodoAST> declaraciones = new ArrayList<>();
-        while (indiceActual < tokens.size()) { // Se recorre toda la línea de tokens
+        while (indiceActual < tokens.size()) { 
             lineaActual++;
-            NodoAST nodoExpresion = expresion(); // Analiza una expresión
-            declaraciones.add(nodoExpresion); // Agrega la expresión al árbol
+            NodoAST nodoExpresion = expresion(); // Analiza una expresion
+            declaraciones.add(nodoExpresion); // Agrega la expresion al arbol
     
-            // Verifica que el token actual sea un punto y coma
             if (indiceActual < tokens.size() && tokens.get(indiceActual).getTipo().equals("PUNTO_COMA")) {
                 lista_numero.add('N');
-                siguienteToken(); // Mueve al siguiente token
+                siguienteToken();
             } else {
                 existe_error = true; 
                 errores_tablaSimbolos.add(lineaActual+1);
-                throw new Exception(" contiene un error en su gramática, falta token ;");
+                throw new Exception(" contiene un error en su gramatica, falta token ;");
             }
         }
         return new NodoPrograma(declaraciones);
@@ -116,28 +114,23 @@ public class FaseSintacticaAST {
         return nodoIzquierdo;
     }
 
-    // Metodo con AST: termino -> factor { ( * | / ) factor }
     private NodoAST termino() throws Exception {
         // Construye el nodo izquierdo al llamar al método factor()
         NodoAST nodoIzquierdo = factor();
         
-        // Mientras haya tokens que representen operadores de multiplicación o división
         while (indiceActual < tokens.size() && 
             (tokens.get(indiceActual).getTipo().equals("MULTIPLICACION") || 
                 tokens.get(indiceActual).getTipo().equals("DIVISION"))) {
             
-            // Guarda el operador y avanza al siguiente token
             String operador = tokens.get(indiceActual).getValor();
             siguienteToken();
             
-            // Validación: Verifica que hay otro token después del operador
             if (indiceActual >= tokens.size()) {
                 existe_error = true;
                 errores_tablaSimbolos.add(lineaActual + 1);
                 throw new Exception("Error [Fase Sintáctica]: La línea " + (lineaActual + 1) + " contiene un operador sin un término después de él.");
             }
 
-            // Validación: Comprueba que el siguiente token después del operador sea un término válido
             String tipoSiguienteToken = tokens.get(indiceActual).getTipo();
             if (!tipoSiguienteToken.equals("IDENTIFICADOR") && 
                 !tipoSiguienteToken.equals("NUMERO") && 
@@ -154,7 +147,7 @@ public class FaseSintacticaAST {
             nodoIzquierdo = new NodoOperacionBinaria(nodoIzquierdo, operador, nodoDerecho, lineaActual);
         }
         
-        // Retorna el nodo izquierdo, que representa la raíz del subárbol de este término
+        // Retorna el nodo izquierdo, que representa la raiz del subarbol de este termino
         return nodoIzquierdo;
     }
 
@@ -163,7 +156,7 @@ public class FaseSintacticaAST {
         if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
             Token identificadorToken = tokens.get(indiceActual);
             siguienteToken();
-            return new NodoIdentificador(identificadorToken.getValor(), lineaActual);
+            return new NodoIdentificador(identificadorToken.getValor(), lineaActual); // Devuelve un nodo identificador
 
         } else if (tokens.get(indiceActual).getTipo().equals("NUMERO")) {
             Token numeroToken = tokens.get(indiceActual);
@@ -172,40 +165,41 @@ public class FaseSintacticaAST {
             if (indiceActual < tokens.size() && tokens.get(indiceActual).getTipo().equals("NUMERO")) {
                 existe_error = true;
                 errores_tablaSimbolos.add(lineaActual + 1);
-                throw new Exception(" contiene números consecutivos sin operador.");
+                throw new Exception(" contiene numeros consecutivos sin operador.");
             }
 
             if (tokens.get(indiceActual).getTipo().equals("PUNTO_COMA") && (lista_numero.get(lista_numero.size() - 1) == 'N')) {
                 validar_numeroSolo = true;
             }
 
-            
             if (validar_numeroSolo) {
                 errores_tablaSimbolos.add(lineaActual + 1);
                 existe_error = true;
-                throw new Exception(" contiene un número que está solo.");
+                throw new Exception(" contiene un numero que esta solo.");
             } 
 
-            return new NodoNumero(Integer.parseInt(numeroToken.getValor()));
+            return new NodoNumero(Integer.parseInt(numeroToken.getValor())); // Devuelve un nodo numero
 
         } else if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_IZQ")) {
             lista.add('S');
             validar_parentesis = false;
             siguienteToken();
-            NodoAST nodoExpresion = expresion();
+
+            NodoAST nodoExpresion = expresion(); // Analiza una expresion
+
             if (tokens.get(indiceActual).getTipo().equals("PARENTESIS_DER")) {
                 siguienteToken();
             } else {
                 errores_tablaSimbolos.add(lineaActual + 1);
                 existe_error = true;
-                throw new Exception(" se esperaba un paréntesis derecho.");
+                throw new Exception(" se esperaba un parentesis derecho.");
             }
             lista.add('N');
-            return nodoExpresion;
+            return nodoExpresion; // devuelve el nodo expresion
         } else {
             errores_tablaSimbolos.add(lineaActual + 1);
             existe_error = true;
-            throw new Exception(" se esperaba un identificador, número o un paréntesis.");
+            throw new Exception(" se esperaba un identificador, numero o un parentesis.");
         }
     }
 

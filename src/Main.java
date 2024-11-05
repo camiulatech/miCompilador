@@ -19,12 +19,12 @@ public class Main {
             //FaseSintactica analizadorSintactico = new FaseSintactica(analizadorLexico.getTokens());
             //analizadorSintactico.analizar();
 
-            System.out.println("\n" + "FASE SINTACTICA AST:");
+            System.out.println("\nFASE SINTACTICA AST:");
 
             FaseSintacticaAST faseSintacticaAST = new FaseSintacticaAST(analizadorLexico.getTokens());
             NodoAST ast = faseSintacticaAST.analizar();
 
-            System.out.println("\n" + "FASE SEMANTICA: ");
+            System.out.println("\nFASE SEMANTICA: ");
             FaseSemantica faseSemantica = new FaseSemantica(analizadorLexico.getTablaSimbolos().getTabla());
             ast.aceptar(faseSemantica);
 
