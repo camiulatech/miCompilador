@@ -12,12 +12,10 @@ abstract class NodoAST {
 class NodoIdentificador extends NodoAST {
     public String nombre;
     public int linea;
-    public String valor;
 
-    public NodoIdentificador(String nombre, int linea, String valor) {
+    public NodoIdentificador(String nombre, int linea) {
         this.nombre = nombre;
         this.linea = linea;
-        this.valor = valor;
     }
 
     @Override
