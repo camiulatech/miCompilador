@@ -153,7 +153,7 @@ public class FaseSintacticaAST {
         if (tokens.get(indiceActual).getTipo().equals("IDENTIFICADOR")) {
             Token identificadorToken = tokens.get(indiceActual);
             siguienteToken();
-            return new NodoIdentificador(identificadorToken.getValor(), lineaActual); // Devuelve un nodo identificador
+            return new NodoIdentificador(identificadorToken.getValor(), lineaActual, identificadorToken.getValor()); // Devuelve un nodo identificador
 
         } else if (tokens.get(indiceActual).getTipo().equals("NUMERO")) {
             Token numeroToken = tokens.get(indiceActual);

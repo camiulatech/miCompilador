@@ -32,17 +32,26 @@ public class FaseSemantica implements VisitanteSemantico {
             System.out.println("Error [Fase Semantica]: " + e.getMessage());
         }
     }
+    
     @Override
     public void visitar(NodoOperacionBinaria nodo) {
         try {
             // Recorre los nodos izquierdo y derecho de la operación binaria
             nodo.izquierda.aceptar(this);
             nodo.derecha.aceptar(this);
+    
             if (nodo.operador.equals("/")) {
                 if (nodo.derecha instanceof NodoNumero) {
                     NodoNumero derechoNumero = (NodoNumero) nodo.derecha;
                     if (derechoNumero.valor == 0) {
                         throw new RuntimeException("La linea " + nodo.linea + " contiene una division entre cero.");
+                    }
+                } else if (nodo.derecha instanceof NodoIdentificador) {
+                    NodoIdentificador derechoIdentificador = (NodoIdentificador) nodo.derecha;
+                    InformacionSimbolo infoSimbolo = tablaSimbolos.get(derechoIdentificador.nombre);
+                    
+                    if (infoSimbolo != null && infoSimbolo.getValor().equals("0")) {
+                        throw new RuntimeException("La linea " + nodo.linea + " contiene una division entre cero usando el identificador '" + derechoIdentificador.nombre + "'.");
                     }
                 }
             }
@@ -51,6 +60,7 @@ public class FaseSemantica implements VisitanteSemantico {
             System.out.println("Error [Fase Semantica]: " + e.getMessage());
         }
     }
+    
 
     @Override
     public void visitar(NodoNumero nodo) {

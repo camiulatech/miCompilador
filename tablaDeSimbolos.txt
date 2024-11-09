@@ -1,3 +1,6 @@
 Tabla de Simbolos:
-Identificador: a, Informacion: Linea: 1, Valor: 5
-Identificador: b, Informacion: Linea: 2, Valor: (a + 10) / 2
+Identificador: i, Informacion: Linea: 1, Valor: 25
+Identificador: c, Informacion: Linea: 2, Valor: 200 + 30
+Identificador: f, Informacion: Linea: 3, Valor: c / 10
+Identificador: y, Informacion: Linea: 4, Valor: (i * 10)
+Identificador: a, Informacion: Linea: 5, Valor: y - f
